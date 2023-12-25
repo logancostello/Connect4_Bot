@@ -2,12 +2,12 @@ class ConnectFour:
     # Each side is represented as a bitboard where each bit represents
     # the following index on the board
     #
-    #       5 12 19 26 33 40 47
-    #       4 11 18 25 32 39 46
-    #       3 10 17 24 31 38 45
-    #       2  9 16 23 30 37 44
-    #       1  8 15 22 29 36 43
-    #       0  7 14 21 28 35 42
+    #           5 12 19 26 33 40 47
+    #           4 11 18 25 32 39 46
+    #           3 10 17 24 31 38 45
+    #           2  9 16 23 30 37 44
+    #           1  8 15 22 29 36 43
+    #           0  7 14 21 28 35 42
     #
     # Note 6, 13, 20, 27, 34, 41, 48 are skipped in order to prevent false
     # positives when checking for a vertical connect four
@@ -113,4 +113,11 @@ class ConnectFour:
                 moves.append(i)
             mask = mask << 7
         return moves
+
+    def make_move(self, col: int):
+        mask = 1 << (col * 7 + self.heights[col])
+        self.board[self.turn % 2] |= mask
+        self.turn += 1
+        self.heights[col] += 1
+        self.moves.append(col)
 

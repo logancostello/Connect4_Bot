@@ -153,6 +153,35 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(moves, game.possible_moves())
 
+    def test_make_move_0(self):
+        game = ConnectFour()
+        game.make_move(0)
 
+        self.assertEqual(1, game.board[0])
+        self.assertEqual(0, game.board[1])
+        self.assertEqual(1, game.heights[0])
+        self.assertEqual(0, game.moves[0])
+        self.assertEqual(1, game.turn)
 
+    def test_make_move_1(self):
+        game = ConnectFour()
+        game.make_move(0)
+        game.make_move(0)
+
+        self.assertEqual(1, game.board[0])
+        self.assertEqual(2, game.board[1])
+        self.assertEqual(2, game.heights[0])
+        self.assertEqual([0, 0], game.moves)
+        self.assertEqual(2, game.turn)
+
+    def test_make_move_2(self):
+        game = ConnectFour()
+        game.make_move(5)
+        game.make_move(5)
+
+        self.assertEqual(pow(2, 35), game.board[0])
+        self.assertEqual(pow(2, 36), game.board[1])
+        self.assertEqual(2, game.heights[5])
+        self.assertEqual([5, 5], game.moves)
+        self.assertEqual(2, game.turn)
 
