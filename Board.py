@@ -93,5 +93,16 @@ class Board:
         return self.vert_connect_four() or self.hor_connect_four() or \
                self.diag_connect_four()
 
+    def possible_moves(self):
+        # return array of ints representing which columns can be played in
+        full_board = self.red | self.yellow
+        moves = []
+        mask = pow(2, 6) - 1
+        for i in range(7):
+            if mask & full_board != mask:
+                moves.append(i)
+            mask = mask << 7
+        return moves
+
 
 

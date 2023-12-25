@@ -125,4 +125,34 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(False, board.neg_connect_four())
 
+    def test_possible_moves_0(self):
+        board = Board()
+        moves = [0, 1, 2, 3, 4, 5, 6]
+
+        self.assertEqual(moves, board.possible_moves())
+
+    def test_possible_moves_1(self):
+        board = Board()
+        board.red = pow(2, 6) - 1
+        moves = [1, 2, 3, 4, 5, 6]
+
+        self.assertEqual(moves, board.possible_moves())
+
+    def test_possible_moves_2(self):
+        board = Board()
+        board.red = pow(2, 48) - 1
+        board.red = board.red ^ (pow(2, 27) - 1)
+        moves = [0, 1, 2, 3]
+
+        self.assertEqual(moves, board.possible_moves())
+
+    def test_possible_moves_3(self):
+        board = Board()
+        board.red = pow(2, 48) - 1
+        moves = []
+
+        self.assertEqual(moves, board.possible_moves())
+
+
+
 
