@@ -1,0 +1,158 @@
+import unittest
+from ConnectFour import ConnectFour
+
+
+class TestBoard(unittest.TestCase):
+    def test_start_board(self):
+        game = ConnectFour()
+
+        self.assertEqual(game.board[0], 0)
+        self.assertEqual(game.board[1], 0)
+
+    def test_vert_connect_four_0(self):
+        game = ConnectFour()
+
+        self.assertEqual(False, game.vert_connect_four())
+
+    def test_vert_connect_four_1(self):
+        game = ConnectFour()
+        game.board[0] = 15
+
+        self.assertEqual(True, game.vert_connect_four())
+
+    def test_vert_connect_four_2(self):
+        game = ConnectFour()
+        game.board[1] = 4
+
+        self.assertEqual(False, game.vert_connect_four())
+
+    def test_vert_connect_four_3(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 43) + pow(2, 44) + pow(2, 45) + pow(2, 46)
+
+        self.assertEqual(True, game.vert_connect_four())
+
+    def test_vert_connect_four_4(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 25) + pow(2, 26) + pow(2, 28) + pow(2, 29)
+
+        self.assertEqual(False, game.vert_connect_four())
+
+    def test_hor_connect_four_0(self):
+        game = ConnectFour()
+
+        self.assertEqual(False, game.hor_connect_four())
+
+    def test_hor_connect_four_1(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 0) + pow(2, 7) + pow(2, 14) + pow(2, 21)
+
+        self.assertEqual(True, game.hor_connect_four())
+
+    def test_hor_connect_four_2(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 42) + pow(2, 35) + pow(2, 28) + pow(2, 21)
+
+        self.assertEqual(True, game.hor_connect_four())
+
+    def test_hor_connect_four_3(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 33) + pow(2, 26) + pow(2, 19) + pow(2, 12)
+
+        self.assertEqual(True, game.hor_connect_four())
+
+    def test_hor_connect_four_4(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 0) + pow(2, 7) + pow(2, 36) + pow(2, 43)
+
+        self.assertEqual(False, game.hor_connect_four())
+
+    def test_hor_connect_four_5(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 1) + pow(2, 8) + pow(2, 35) + pow(2, 42)
+
+        self.assertEqual(False, game.hor_connect_four())
+
+    def test_pos_connect_four_0(self):
+        game = ConnectFour()
+
+        self.assertEqual(False, game.pos_connect_four())
+
+    def test_pos_connect_four_1(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 0) + pow(2, 8) + pow(2, 16) + pow(2, 24)
+
+        self.assertEqual(True, game.pos_connect_four())
+
+    def test_pos_connect_four_2(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 23) + pow(2, 31) + pow(2, 39) + pow(2, 47)
+
+        self.assertEqual(True, game.pos_connect_four())
+
+    def test_pos_connect_four_3(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 3) + pow(2, 11) + pow(2, 19) + pow(2, 27)
+
+        self.assertEqual(False, game.pos_connect_four())
+
+    def test_neg_connect_four_0(self):
+        game = ConnectFour()
+
+        self.assertEqual(False, game.neg_connect_four())
+
+    def test_neg_connect_four_1(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 3) + pow(2, 9) + pow(2, 15) + pow(2, 21)
+
+        self.assertEqual(True, game.neg_connect_four())
+
+    def test_neg_connect_four_2(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 26) + pow(2, 32) + pow(2, 38) + pow(2, 44)
+
+        self.assertEqual(True, game.neg_connect_four())
+
+    def test_neg_connect_four_3(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 5) + pow(2, 11) + pow(2, 17) + pow(2, 23)
+
+        self.assertEqual(True, game.neg_connect_four())
+
+    def test_neg_connect_four_4(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 6) + pow(2, 12) + pow(2, 18) + pow(2, 24)
+
+        self.assertEqual(False, game.neg_connect_four())
+
+    def test_possible_moves_0(self):
+        game = ConnectFour()
+        moves = [0, 1, 2, 3, 4, 5, 6]
+
+        self.assertEqual(moves, game.possible_moves())
+
+    def test_possible_moves_1(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 6) - 1
+        moves = [1, 2, 3, 4, 5, 6]
+
+        self.assertEqual(moves, game.possible_moves())
+
+    def test_possible_moves_2(self):
+        game = ConnectFour()
+        game.board[1] = pow(2, 48) - 1
+        game.board[1] = game.board[1] ^ (pow(2, 27) - 1)
+        moves = [0, 1, 2, 3]
+
+        self.assertEqual(moves, game.possible_moves())
+
+    def test_possible_moves_3(self):
+        game = ConnectFour()
+        game.board[0] = pow(2, 48) - 1
+        moves = []
+
+        self.assertEqual(moves, game.possible_moves())
+
+
+
+
