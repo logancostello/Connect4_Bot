@@ -162,6 +162,10 @@ class TestBoard(unittest.TestCase):
         moves = []
 
         self.assertEqual(moves, game.possible_moves())
+        self.assertEqual(
+            game.board[0] | game.board[1],
+            game.board[0] ^ game.board[1]
+        )
 
     def test_make_move_0(self):
         game = ConnectFour()
@@ -195,3 +199,44 @@ class TestBoard(unittest.TestCase):
         self.assertEqual([5, 5], game.moves)
         self.assertEqual(2, game.turn)
 
+    def test_undo_move_0(self):
+        game = ConnectFour()
+        game.make_move(0)
+        game.undo_move()
+
+        self.assertEqual(0, game.board[0])
+        self.assertEqual(0, game.board[1])
+        self.assertEqual(0, game.heights[0])
+        self.assertEqual([], game.moves)
+        self.assertEqual(0, game.turn)
+
+    def test_undo_move_1(self):
+        game = ConnectFour()
+        game.make_move(5)
+        game.make_move(5)
+        game.undo_move()
+
+        self.assertEqual(pow(2, 35), game.board[0])
+        self.assertEqual(0, game.board[1])
+        self.assertEqual(1, game.heights[5])
+        self.assertEqual([5], game.moves)
+        self.assertEqual(1, game.turn)
+
+    def test_undo_move_2(self):
+        game = ConnectFour()
+        for i in range(6):
+            game.make_move(0)
+            game.make_move(1)
+            game.make_move(2)
+            game.make_move(3)
+            game.make_move(4)
+            game.make_move(5)
+            game.make_move(6)
+        for i in range(42):
+            game.undo_move()
+
+        self.assertEqual(0, game.board[0])
+        self.assertEqual(0, game.board[1])
+        self.assertEqual([0, 0, 0, 0, 0, 0, 0], game.heights)
+        self.assertEqual([], game.moves)
+        self.assertEqual(0, game.turn)

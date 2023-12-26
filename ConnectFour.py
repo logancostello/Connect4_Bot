@@ -103,17 +103,6 @@ class ConnectFour:
         return self.vert_connect_four() or self.hor_connect_four() or \
                self.diag_connect_four()
 
-    def possible_moves2(self):
-        # return array of ints representing which columns can be played in
-        full_board = self.board[0] | self.board[1]
-        moves = []
-        mask = pow(2, 6) - 1
-        for i in range(7):
-            if mask & full_board != mask:
-                moves.append(i)
-            mask = mask << 7
-        return moves
-
     def possible_moves(self):
         # return array of ints representing which columns can be played in
         moves = []
@@ -128,4 +117,12 @@ class ConnectFour:
         self.turn += 1
         self.heights[col] += 1
         self.moves.append(col)
+
+    def undo_move(self):
+        self.turn -= 1
+        col = self.moves.pop()
+        self.heights[col] -= 1
+        mask = 1 << (col * 7 + self.heights[col])
+        mask ^= pow(2, 48) - 1
+        self.board[self.turn % 2] &= mask
 
