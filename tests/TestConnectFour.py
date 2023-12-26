@@ -133,22 +133,32 @@ class TestBoard(unittest.TestCase):
 
     def test_possible_moves_1(self):
         game = ConnectFour()
-        game.board[0] = pow(2, 6) - 1
+        for i in range(6):
+            game.make_move(0)
         moves = [1, 2, 3, 4, 5, 6]
 
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_2(self):
         game = ConnectFour()
-        game.board[1] = pow(2, 48) - 1
-        game.board[1] = game.board[1] ^ (pow(2, 27) - 1)
+        for i in range(6):
+            game.make_move(4)
+            game.make_move(5)
+            game.make_move(6)
         moves = [0, 1, 2, 3]
 
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_3(self):
         game = ConnectFour()
-        game.board[0] = pow(2, 48) - 1
+        for i in range(6):
+            game.make_move(0)
+            game.make_move(1)
+            game.make_move(2)
+            game.make_move(3)
+            game.make_move(4)
+            game.make_move(5)
+            game.make_move(6)
         moves = []
 
         self.assertEqual(moves, game.possible_moves())
