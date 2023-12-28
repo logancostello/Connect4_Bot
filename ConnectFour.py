@@ -26,7 +26,7 @@ class ConnectFour:
         for rowNum in reversed(range(6)):
             row = []
             for colNum in range(7):
-                mask = 1 << rowNum + 6 * colNum
+                mask = 1 << rowNum + 7 * colNum
                 if self.board[0] & mask:
                     row.append('O')
                 elif self.board[1] & mask:
@@ -45,12 +45,11 @@ class ConnectFour:
     def vert_connect_four(self):
         # currently only checks the red side
         # can be made more efficient by removing redundant checks
-        for player in self.board:
-            mask = 15
-            while mask < pow(2, 48):
-                if mask & player == mask:
-                    return True
-                mask = mask << 1
+        mask = 15
+        while mask < pow(2, 48):
+            if mask & self.board[(self.turn + 1) % 2] == mask:
+                return True
+            mask = mask << 1
         return False
 
     def hor_connect_four(self):
@@ -58,50 +57,50 @@ class ConnectFour:
         # can be made more efficient by removing redundant checks eg: if the
         # middle slot is empty there cannot be a horizontal connect four on
         # that row
-        for player in self.board:
-            mask = pow(2, 21)
-            while mask != pow(2, 27):
-                if (mask & player) and (mask >> 7 & player) and \
-                        (mask >> 14 & player) and (mask >> 21 & player):
-                    return True
-                if mask > pow(2, 41):
-                    mask = mask >> 20
-                else:
-                    mask = mask << 7
+        mask = pow(2, 21)
+        while mask != pow(2, 27):
+            if (mask & self.board[(self.turn + 1) % 2]) and \
+                    (mask >> 7 & self.board[(self.turn + 1) % 2]) and \
+                    (mask >> 14 & self.board[(self.turn + 1) % 2]) and \
+                    (mask >> 21 & self.board[(self.turn + 1) % 2]):
+                return True
+            if mask > pow(2, 41):
+                mask = mask >> 20
+            else:
+                mask = mask << 7
         return False
 
     def pos_connect_four(self):
-        for player in self.board:
-            mask = pow(2, 24)
-            while mask != pow(2, 27):
-                if (mask & player) and (mask >> 8 & player) and \
-                        (mask >> 16 & player) and (mask >> 24 & player):
-                    return True
-                if mask > pow(2, 44):
-                    mask = mask >> 20
-                else:
-                    mask = mask << 7
+        mask = pow(2, 24)
+        while mask != pow(2, 27):
+            if (mask & self.board[(self.turn + 1) % 2]) and \
+                    (mask >> 8 & self.board[(self.turn + 1) % 2]) and \
+                    (mask >> 16 & self.board[(self.turn + 1) % 2]) and \
+                    (mask >> 24 & self.board[(self.turn + 1) % 2]):
+                return True
+            if mask > pow(2, 44):
+                mask = mask >> 20
+            else:
+                mask = mask << 7
         return False
 
     def neg_connect_four(self):
-        for player in self.board:
-            mask = pow(2, 3)
-            while mask != pow(2, 6):
-                if (mask & player) and (mask << 6 & player) and \
-                        (mask << 12 & player) and (mask << 18 & player):
-                    return True
-                if mask > pow(2, 23):
-                    mask = mask >> 20
-                else:
-                    mask = mask << 7
+        mask = pow(2, 3)
+        while mask != pow(2, 6):
+            if (mask & self.board[(self.turn + 1) % 2]) and \
+                    (mask << 6 & self.board[(self.turn + 1) % 2]) and \
+                    (mask << 12 & self.board[(self.turn + 1) % 2]) and \
+                    (mask << 18 & self.board[(self.turn + 1) % 2]):
+                return True
+            if mask > pow(2, 23):
+                mask = mask >> 20
+            else:
+                mask = mask << 7
         return False
-
-    def diag_connect_four(self):
-        return self.pos_connect_four() or self.neg_connect_four()
 
     def connect_four(self):
         return self.vert_connect_four() or self.hor_connect_four() or \
-               self.diag_connect_four()
+               self.pos_connect_four() or self.neg_connect_four()
 
     def possible_moves(self):
         # return array of ints representing which columns can be played in
@@ -125,4 +124,3 @@ class ConnectFour:
         mask = 1 << (col * 7 + self.heights[col])
         mask ^= pow(2, 48) - 1
         self.board[self.turn % 2] &= mask
-
