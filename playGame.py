@@ -3,6 +3,7 @@ BOT_STRATEGY_1 = ConnectFour.random_strategy
 BOT_STRATEGY_2 = ConnectFour.random_strategy
 NUM_GAMES = 1000
 
+
 def botVSHuman():
     print("Starting game")
     game = ConnectFour(BOT_STRATEGY_1, BOT_STRATEGY_2)
@@ -25,7 +26,7 @@ def botVSHuman():
 
 def botVSBot():
     game = ConnectFour(BOT_STRATEGY_1, BOT_STRATEGY_2)
-    while (not game.connect_four()) and (len(game.possible_moves()) > 0):
+    while not game.connect_four() and game.possible_moves() != []:
         if game.turn % 2:
             game.player_2_turn()
         else:
@@ -43,9 +44,8 @@ def playManyGames(numGames):
     score = [0, 0, 0]
     for x in range(numGames):
         score[botVSBot()] += 1
-    return score
+    print(score)
 
 
 if __name__ == '__main__':
-    print(playManyGames(NUM_GAMES))
-
+    playManyGames(1000)
