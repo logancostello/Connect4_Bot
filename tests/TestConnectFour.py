@@ -4,18 +4,26 @@ from ConnectFour import ConnectFour
 
 class TestBoard(unittest.TestCase):
     def test_start_board(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
 
         self.assertEqual(game.board[0], 0)
         self.assertEqual(game.board[1], 0)
 
     def test_vert_connect_four_0(self):
-        game = ConnectFour()
-
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         self.assertEqual(False, game.vert_connect_four())
 
     def test_vert_connect_four_1(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.make_move(1)
         game.make_move(0)
@@ -27,8 +35,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(True, game.vert_connect_four())
 
     def test_vert_connect_four_2(self):
-        game = ConnectFour()
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(6)
         game.make_move(6)
         game.make_move(6)
@@ -41,7 +51,10 @@ class TestBoard(unittest.TestCase):
 
     def test_vert_connect_four_3(self):
         # Checks for vertical "wrapping" case
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.make_move(0)
         game.make_move(0)
@@ -56,12 +69,18 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(False, game.vert_connect_four())
 
     def test_hor_connect_four_0(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
 
         self.assertEqual(False, game.hor_connect_four())
 
     def test_hor_connect_four_1(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.make_move(0)
         game.make_move(1)
@@ -73,21 +92,30 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(True, game.hor_connect_four())
 
     def test_hor_connect_four_2(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.board[1] = pow(2, 42) + pow(2, 35) + pow(2, 28) + pow(2, 21)
         game.turn = 0
 
         self.assertEqual(True, game.hor_connect_four())
 
     def test_hor_connect_four_3(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.board[0] = pow(2, 33) + pow(2, 26) + pow(2, 19) + pow(2, 12)
         game.turn = 1
 
         self.assertEqual(True, game.hor_connect_four())
 
     def test_hor_connect_four_4(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.make_move(1)
         game.make_move(1)
@@ -102,12 +130,18 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(False, game.hor_connect_four())
 
     def test_pos_connect_four_0(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
 
         self.assertEqual(False, game.pos_connect_four())
 
     def test_pos_connect_four_1(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.make_move(1)
         game.make_move(1)
@@ -123,7 +157,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(True, game.pos_connect_four())
 
     def test_pos_connect_four_2(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(5)
         game.make_move(6)
         game.make_move(4)
@@ -138,19 +175,28 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(False, game.pos_connect_four())
 
     def test_pos_connect_four_3(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.board[1] = pow(2, 3) + pow(2, 11) + pow(2, 19) + pow(2, 27)
         game.turn = 0
 
         self.assertEqual(False, game.pos_connect_four())
 
     def test_neg_connect_four_0(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
 
         self.assertEqual(False, game.neg_connect_four())
 
     def test_neg_connect_four_1(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(5)
         game.make_move(6)
         game.make_move(4)
@@ -165,27 +211,39 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(True, game.neg_connect_four())
 
     def test_neg_connect_four_2(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.board[0] = pow(2, 5) + pow(2, 11) + pow(2, 17) + pow(2, 23)
         game.turn = 1
 
         self.assertEqual(True, game.neg_connect_four())
 
     def test_neg_connect_four_3(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.board[1] = pow(2, 6) + pow(2, 12) + pow(2, 18) + pow(2, 24)
         game.turn = 0
 
         self.assertEqual(False, game.neg_connect_four())
 
     def test_possible_moves_0(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         moves = [0, 1, 2, 3, 4, 5, 6]
 
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_1(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         for i in range(6):
             game.make_move(0)
         moves = [1, 2, 3, 4, 5, 6]
@@ -193,7 +251,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_2(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         for i in range(6):
             game.make_move(4)
             game.make_move(5)
@@ -203,7 +264,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_3(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         for i in range(6):
             game.make_move(0)
             game.make_move(1)
@@ -221,7 +285,10 @@ class TestBoard(unittest.TestCase):
         )
 
     def test_make_move_0(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
 
         self.assertEqual(1, game.board[0])
@@ -231,7 +298,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(1, game.turn)
 
     def test_make_move_1(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.make_move(0)
 
@@ -242,7 +312,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(2, game.turn)
 
     def test_make_move_2(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(5)
         game.make_move(5)
 
@@ -253,7 +326,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(2, game.turn)
 
     def test_make_move_3(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.make_move(1)
         game.make_move(1)
@@ -265,7 +341,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(3, game.turn)
 
     def test_undo_move_0(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(0)
         game.undo_move()
 
@@ -276,7 +355,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(0, game.turn)
 
     def test_undo_move_1(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         game.make_move(5)
         game.make_move(5)
         game.undo_move()
@@ -288,7 +370,10 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(1, game.turn)
 
     def test_undo_move_2(self):
-        game = ConnectFour()
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
         for i in range(6):
             game.make_move(0)
             game.make_move(1)

@@ -1,3 +1,6 @@
+import random
+
+
 class ConnectFour:
     # Each side is represented as a bitboard where each bit represents
     # the following index on the board
@@ -15,11 +18,13 @@ class ConnectFour:
     # Within board are the two bitboards, each of which correspond to a player
     # Each player can access their board with the index turn % 2
 
-    def __init__(self):
+    def __init__(self, strat1, strat2):
         self.board = [0, 0]
         self.turn = 0
         self.moves = []
         self.heights = [0, 0, 0, 0, 0, 0, 0]
+        self.player_1_turn = strat1.__get__(self)
+        self.player_2_turn = strat2.__get__(self)
 
     def board_as_array(self):
         board = []
@@ -43,8 +48,6 @@ class ConnectFour:
         print('0 1 2 3 4 5 6')
 
     def vert_connect_four(self):
-        # currently only checks the red side
-        # can be made more efficient by removing redundant checks
         mask = 15
         while mask < pow(2, 48):
             if mask & self.board[(self.turn + 1) % 2] == mask:
@@ -53,10 +56,6 @@ class ConnectFour:
         return False
 
     def hor_connect_four(self):
-        # currently only checks the red side
-        # can be made more efficient by removing redundant checks eg: if the
-        # middle slot is empty there cannot be a horizontal connect four on
-        # that row
         mask = pow(2, 21)
         while mask != pow(2, 27):
             if (mask & self.board[(self.turn + 1) % 2]) and \
@@ -124,3 +123,18 @@ class ConnectFour:
         mask = 1 << (col * 7 + self.heights[col])
         mask ^= pow(2, 48) - 1
         self.board[self.turn % 2] &= mask
+
+    # Under this comment are multiple "strategies" that the bot may play. When
+    # in an actual game, it will only play the one it is given by the user.
+    # However, the reasoning behind leaving the many strategies here (even
+    # though only one will be the best) is to be able to view the progress of
+    # the bot by having the bot face an older version of itself.
+    #
+    # SCORES [WIN, TIE, LOSS, TOTAL]
+    # random_strategy vs random_strategy: [55411, 254, 44335, 100000]
+    def random_strategy(self):
+        move = random.choice(self.possible_moves())
+        self.make_move(move)
+        return move
+
+
