@@ -427,6 +427,32 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual([-math.inf, 6], game.minimax(4))
 
+    def test_minimax_3(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(2)
+        game.make_move(3)
+        game.make_move(4)
+        game.make_move(3)
+
+        self.assertEqual(3, game.minimax(2)[1])
+
+    def test_minimax_4(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(4)
+
+        self.assertEqual(5, game.minimax(4)[1])
+
     # def test_minimax_2(self):
     #     game = ConnectFour(
     #         ConnectFour.random_strategy,
