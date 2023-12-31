@@ -135,14 +135,17 @@ class ConnectFour:
     #
     # SCORES [WIN, TIE, LOSS, TOTAL]
     # random_strategy vs random_strategy: [55411, 254, 44335, 100000]
+    # minimax_depth_1_no_eval vs random_strategy: [840, 0, 160, 1000]
+    # minimax_depth_2_no_eval vs random_strategy: [964, 1, 35, 1000]
     # minimax_depth_3_no_eval vs random_strategy: [953, 1, 46, 1000]
+    # minimax_depth_4_no_eval vs random_strategy: [980, 0, 20, 1000]
     def random_strategy(self):
         move = random.choice(self.possible_moves())
         self.make_move(move)
         return move
 
     def minimax_strategy(self):
-        move = self.minimax(3)[1]
+        move = self.minimax(1)[1]
         self.make_move(move)
         return move
 
