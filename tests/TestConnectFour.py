@@ -351,7 +351,7 @@ class TestBoard(unittest.TestCase):
         self.assertEqual([], game.moves)
         self.assertEqual(0, game.turn)
 
-    def test_minimax_0(self):
+    def test_search_0(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
@@ -362,14 +362,14 @@ class TestBoard(unittest.TestCase):
         game.make_move(4)
         game.make_move(4)
 
-        self.assertEqual([math.inf, 5], game.minimax(4))
-        self.assertEqual([math.inf, 5], game.minimax(3))
+        self.assertEqual([math.inf, 5], game.search(4))
+        self.assertEqual([math.inf, 5], game.search(3))
         game.make_move(2)
-        self.assertEqual(-math.inf, game.minimax(2)[0])
+        self.assertEqual(-math.inf, game.search(2)[0])
         game.make_move(2)
-        self.assertEqual([math.inf, 5], game.minimax(1))
+        self.assertEqual([math.inf, 5], game.search(1))
 
-    def test_minimax_1(self):
+    def test_search_1(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
@@ -387,9 +387,9 @@ class TestBoard(unittest.TestCase):
         game.make_move(0)
         game.make_move(4)
 
-        self.assertEqual([-math.inf, 6], game.minimax(4))
+        self.assertEqual([-math.inf, 6], game.search(4))
 
-    def test_minimax_3(self):
+    def test_search_3(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
@@ -401,9 +401,9 @@ class TestBoard(unittest.TestCase):
         game.make_move(4)
         game.make_move(3)
 
-        self.assertEqual(3, game.minimax(2)[1])
+        self.assertEqual(3, game.search(2)[1])
 
-    def test_minimax_4(self):
+    def test_search_4(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
@@ -413,4 +413,4 @@ class TestBoard(unittest.TestCase):
         game.make_move(3)
         game.make_move(4)
 
-        self.assertEqual(5, game.minimax(4)[1])
+        self.assertEqual(5, game.search(4)[1])
