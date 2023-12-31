@@ -114,13 +114,13 @@ class ConnectFour:
             return [0, -1]  # return heuristic evaluation in future
         elif not possible_moves:
             return [0, -1]  # tie game
-        best_move = -1  # initialized at a null move
+        best_move = possible_moves[0]
         maxEval = float('-inf')
         for move in possible_moves:
             self.make_move(move)
             score = -self.search(depth - 1, -beta, -alpha)[0]
             self.undo_move()
-            if score >= maxEval:
+            if score > maxEval:
                 maxEval = score
                 best_move = move
             alpha = max(alpha, score)

@@ -362,12 +362,12 @@ class TestBoard(unittest.TestCase):
         game.make_move(4)
         game.make_move(4)
 
-        self.assertEqual([math.inf, 5], game.search(4))
-        self.assertEqual([math.inf, 5], game.search(3))
+        self.assertEqual([math.inf, 2], game.search(4))
+        self.assertEqual([math.inf, 2], game.search(3))
         game.make_move(2)
         self.assertEqual(-math.inf, game.search(2)[0])
         game.make_move(2)
-        self.assertEqual([math.inf, 5], game.search(1))
+        self.assertEqual([math.inf, 1], game.search(1))
 
     def test_search_1(self):
         game = ConnectFour(
@@ -387,7 +387,11 @@ class TestBoard(unittest.TestCase):
         game.make_move(0)
         game.make_move(4)
 
-        self.assertEqual([-math.inf, 6], game.search(4))
+        game.print()
+
+        self.assertEqual(-math.inf, game.search(4)[0])
+        game.make_move(2)
+        self.assertEqual([math.inf, 6], game.search(3))
 
     def test_search_3(self):
         game = ConnectFour(
@@ -413,4 +417,4 @@ class TestBoard(unittest.TestCase):
         game.make_move(3)
         game.make_move(4)
 
-        self.assertEqual(5, game.search(4)[1])
+        self.assertEqual(2, game.search(4)[1])
