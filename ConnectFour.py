@@ -141,37 +141,38 @@ class ConnectFour:
         return move
 
     def minimax(self, depth, alpha=-math.inf, beta=math.inf, maximizer=True):
-        # minimax search algorithm
-        # includes alpha beta pruning
+        # minimax search algorithm with alpha-beta pruning
         if self.connect_four():
-            return -math.inf if maximizer else math.inf
+            return [-math.inf, -1] if maximizer else [math.inf, -1]
         possible_moves = self.possible_moves()
-        if depth == 0 or possible_moves == []:
-            return 0  # return heuristic evaluation in future
-        elif maximizer:
+        if depth == 0:
+            return [0, -1]  # return heuristic evaluation in future
+        elif not possible_moves:
+            return [0, -1]  # tie game
+        best_move = -1  # initialized at a null move
+        if maximizer:
             maxEval = float('-inf')
             for move in possible_moves:
                 self.make_move(move)
-                score = self.minimax(depth - 1, alpha, beta, False)
+                score = self.minimax(depth - 1, alpha, beta, False)[0]
                 self.undo_move()
-                maxEval = max(maxEval, score)
+                if score >= maxEval:
+                    maxEval = score
+                    best_move = move
                 if score > beta:
                     break
                 alpha = max(alpha, score)
-            return maxEval
+            return [maxEval, best_move]
         else:
             minEval = float('inf')
             for move in possible_moves:
                 self.make_move(move)
-                score = self.minimax(depth - 1, alpha, beta, True)
+                score = self.minimax(depth - 1, alpha, beta, True)[0]
                 self.undo_move()
-                minEval = min(minEval, score)
+                if score <= minEval:
+                    minEval = score
+                    best_move = move
                 if score < alpha:
                     break
                 beta = min(score, beta)
-            return minEval
-
-
-
-
-
+            return [minEval, best_move]

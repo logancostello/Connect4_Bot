@@ -125,9 +125,6 @@ class TestBoard(unittest.TestCase):
         game.make_move(2)
         game.make_move(3)
 
-        print(bin(game.board[0]))
-        game.print()
-
         self.assertEqual(False, game.hor_connect_four())
 
     def test_pos_connect_four_0(self):
@@ -403,12 +400,12 @@ class TestBoard(unittest.TestCase):
         game.make_move(4)
         game.make_move(4)
 
-        self.assertEqual(math.inf, game.minimax(4))
-        self.assertEqual(math.inf, game.minimax(3))
+        self.assertEqual([math.inf, 5], game.minimax(4))
+        self.assertEqual([math.inf, 5], game.minimax(3))
         game.make_move(2)
-        self.assertEqual(-math.inf, game.minimax(2))
+        self.assertEqual(-math.inf, game.minimax(2)[0])
         game.make_move(2)
-        self.assertEqual(math.inf, game.minimax(1))
+        self.assertEqual([math.inf, 5], game.minimax(1))
 
     def test_minimax_1(self):
         game = ConnectFour(
@@ -428,8 +425,46 @@ class TestBoard(unittest.TestCase):
         game.make_move(0)
         game.make_move(4)
 
-        self.assertEqual(-math.inf, game.minimax(4))
+        self.assertEqual([-math.inf, 6], game.minimax(4))
 
+    # def test_minimax_2(self):
+    #     game = ConnectFour(
+    #         ConnectFour.random_strategy,
+    #         ConnectFour.random_strategy
+    #     )
+    #
+    #     game.make_move(3)
+    #     game.make_move(2)
+    #     game.make_move(3)
+    #     game.make_move(6)
+    #     game.make_move(6)
+    #     game.make_move(3)
+    #     game.make_move(2)
+    #     game.make_move(2)
+    #     game.make_move(3)
+    #     game.make_move(3)
+    #     game.make_move(2)
+    #     game.make_move(3)
+    #     game.make_move(2)
+    #     game.make_move(2)
+    #
+    #     # game is solved here if player 2 copies all of player 1's moves
+    #
+    #     game.make_move(0)
+    #     game.make_move(0)
+    #     game.make_move(0)
+    #     game.make_move(0)
+    #     game.make_move(0)
+    #     game.make_move(0)
+    #     game.make_move(6)
+    #     game.make_move(6)
+    #     game.make_move(6)
+    #     game.make_move(6)
+    #     game.make_move(6)
+    #     game.make_move(6)
+    #
+    #     self.assertEqual(-math.inf, game.minimax(29)[0])
+    #
 
 
 
