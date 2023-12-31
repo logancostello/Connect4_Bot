@@ -50,59 +50,15 @@ class ConnectFour:
         print('-------------')
         print('0 1 2 3 4 5 6')
 
-    def vert_connect_four(self):
-        mask = 15
-        while mask < pow(2, 48):
-            if mask & self.board[(self.turn + 1) % 2] == mask:
-                return True
-            mask = mask << 1
-        return False
-
-    def hor_connect_four(self):
-        mask = pow(2, 21)
-        while mask != pow(2, 27):
-            if (mask & self.board[(self.turn + 1) % 2]) and \
-                    (mask >> 7 & self.board[(self.turn + 1) % 2]) and \
-                    (mask >> 14 & self.board[(self.turn + 1) % 2]) and \
-                    (mask >> 21 & self.board[(self.turn + 1) % 2]):
-                return True
-            if mask > pow(2, 41):
-                mask = mask >> 20
-            else:
-                mask = mask << 7
-        return False
-
-    def pos_connect_four(self):
-        mask = pow(2, 24)
-        while mask != pow(2, 27):
-            if (mask & self.board[(self.turn + 1) % 2]) and \
-                    (mask >> 8 & self.board[(self.turn + 1) % 2]) and \
-                    (mask >> 16 & self.board[(self.turn + 1) % 2]) and \
-                    (mask >> 24 & self.board[(self.turn + 1) % 2]):
-                return True
-            if mask > pow(2, 44):
-                mask = mask >> 20
-            else:
-                mask = mask << 7
-        return False
-
-    def neg_connect_four(self):
-        mask = pow(2, 3)
-        while mask != pow(2, 6):
-            if (mask & self.board[(self.turn + 1) % 2]) and \
-                    (mask << 6 & self.board[(self.turn + 1) % 2]) and \
-                    (mask << 12 & self.board[(self.turn + 1) % 2]) and \
-                    (mask << 18 & self.board[(self.turn + 1) % 2]):
-                return True
-            if mask > pow(2, 23):
-                mask = mask >> 20
-            else:
-                mask = mask << 7
-        return False
-
     def connect_four(self):
-        return self.vert_connect_four() or self.hor_connect_four() or \
-               self.pos_connect_four() or self.neg_connect_four()
+        b = self.board[(self.turn + 1) % 2]
+        # if horizontal or vertical or negative or positive, return True
+        if (b & b << 7 & b << 14 & b << 21) | \
+               (b & b << 1 & b << 2 & b << 3) | \
+               (b & b << 6 & b << 12 & b << 18) | \
+               (b & b << 8 & b << 16 & b << 24):
+            return True
+        return False
 
     def possible_moves(self):
         # return array of ints representing which columns can be played in
@@ -145,7 +101,7 @@ class ConnectFour:
         return move
 
     def minimax_strategy(self):
-        move = self.minimax(1)[1]
+        move = self.minimax(4)[1]
         self.make_move(move)
         return move
 
