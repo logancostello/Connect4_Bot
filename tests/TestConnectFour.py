@@ -1,3 +1,4 @@
+import math
 import unittest
 from ConnectFour import ConnectFour
 
@@ -390,3 +391,46 @@ class TestBoard(unittest.TestCase):
         self.assertEqual([0, 0, 0, 0, 0, 0, 0], game.heights)
         self.assertEqual([], game.moves)
         self.assertEqual(0, game.turn)
+
+    def test_minimax_0(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(4)
+        game.make_move(4)
+
+        self.assertEqual(math.inf, game.minimax(4))
+        self.assertEqual(math.inf, game.minimax(3))
+        game.make_move(2)
+        self.assertEqual(-math.inf, game.minimax(2))
+        game.make_move(2)
+        self.assertEqual(math.inf, game.minimax(1))
+
+    def test_minimax_1(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(4)
+        game.make_move(4)
+        game.make_move(5)
+        game.make_move(5)
+        game.make_move(3)
+        game.make_move(5)
+        game.make_move(6)
+        game.make_move(3)
+        game.make_move(0)
+        game.make_move(4)
+
+        self.assertEqual(-math.inf, game.minimax(4))
+
+
+
+
+

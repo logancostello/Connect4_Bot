@@ -1,4 +1,5 @@
 import random
+import math
 
 
 class ConnectFour:
@@ -11,6 +12,8 @@ class ConnectFour:
     #           2  9 16 23 30 37 44
     #           1  8 15 22 29 36 43
     #           0  7 14 21 28 35 42
+    #           -------------------
+    #           0  1  2  3  4  5  6
     #
     # Note 6, 13, 20, 27, 34, 41, 48 are skipped in order to prevent false
     # positives when checking for a vertical connect four
@@ -136,5 +139,39 @@ class ConnectFour:
         move = random.choice(self.possible_moves())
         self.make_move(move)
         return move
+
+    def minimax(self, depth, alpha=-math.inf, beta=math.inf, maximizer=True):
+        # minimax search algorithm
+        # includes alpha beta pruning
+        if self.connect_four():
+            return -math.inf if maximizer else math.inf
+        possible_moves = self.possible_moves()
+        if depth == 0 or possible_moves == []:
+            return 0  # return heuristic evaluation in future
+        elif maximizer:
+            maxEval = float('-inf')
+            for move in possible_moves:
+                self.make_move(move)
+                score = self.minimax(depth - 1, alpha, beta, False)
+                self.undo_move()
+                maxEval = max(maxEval, score)
+                if score > beta:
+                    break
+                alpha = max(alpha, score)
+            return maxEval
+        else:
+            minEval = float('inf')
+            for move in possible_moves:
+                self.make_move(move)
+                score = self.minimax(depth - 1, alpha, beta, True)
+                self.undo_move()
+                minEval = min(minEval, score)
+                if score < alpha:
+                    break
+                beta = min(score, beta)
+            return minEval
+
+
+
 
 
