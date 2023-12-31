@@ -1,5 +1,5 @@
 from ConnectFour import ConnectFour
-BOT_STRATEGY_1 = ConnectFour.random_strategy
+BOT_STRATEGY_1 = ConnectFour.minimax_strategy
 BOT_STRATEGY_2 = ConnectFour.random_strategy
 NUM_GAMES = 1000
 
