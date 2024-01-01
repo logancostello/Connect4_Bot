@@ -54,9 +54,9 @@ class ConnectFour:
         b = self.board[(self.turn + 1) % 2]
         # if horizontal or vertical or negative or positive, return True
         if (b & b << 7 & b << 14 & b << 21) | \
-               (b & b << 1 & b << 2 & b << 3) | \
-               (b & b << 6 & b << 12 & b << 18) | \
-               (b & b << 8 & b << 16 & b << 24):
+                (b & b << 1 & b << 2 & b << 3) | \
+                (b & b << 6 & b << 12 & b << 18) | \
+                (b & b << 8 & b << 16 & b << 24):
             return True
         return False
 
@@ -101,7 +101,7 @@ class ConnectFour:
         return move
 
     def minimax_strategy(self):
-        move = self.search(4)[1]
+        move = self.search(7)[1]
         self.make_move(move)
         return move
 
@@ -127,4 +127,35 @@ class ConnectFour:
             if alpha > beta:
                 break
         return [maxEval, best_move]
+
+    def threats(self):
+        threats = [0, 0]
+        # extra numbers set the outside of the board, so when it's flipped,
+        # there aren't false positives for threats
+        b = self.board[0] | self.board[1] | 283691315109952 | 71776119061217280
+        for i in range(2):
+            my_b = self.board[i % 2]
+
+            # vertical threats
+            threats[i] ^= ~b & my_b << 1 & my_b << 2 & my_b << 3
+
+            # horizontal threats
+            threats[i] ^= ~b & my_b << 7 & my_b << 14 & my_b << 21
+            threats[i] ^= (my_b & ~b << 7 & my_b << 14 & my_b << 21) >> 7
+            threats[i] ^= (my_b & my_b << 7 & ~b << 14 & my_b << 21) >> 14
+            threats[i] ^= (my_b & my_b << 7 & my_b << 14 & ~b << 21) >> 21
+
+            # positive diagonal threats
+            threats[i] ^= ~b & my_b << 8 & my_b << 16 & my_b << 24
+            threats[i] ^= (my_b & ~b << 8 & my_b << 16 & my_b << 24) >> 8
+            threats[i] ^= (my_b & my_b << 8 & ~b << 16 & my_b << 24) >> 16
+            threats[i] ^= (my_b & my_b << 8 & my_b << 16 & ~b << 24) >> 24
+
+            # negative diagonal threats
+            threats[i] ^= ~b & my_b << 6 & my_b << 12 & my_b << 18
+            threats[i] ^= (my_b & ~b << 6 & my_b << 12 & my_b << 18) >> 6
+            threats[i] ^= (my_b & my_b << 6 & ~b << 12 & my_b << 18) >> 12
+            threats[i] ^= (my_b & my_b << 6 & my_b << 12 & ~b << 18) >> 18
+
+        return threats
 

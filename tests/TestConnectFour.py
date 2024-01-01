@@ -387,8 +387,6 @@ class TestBoard(unittest.TestCase):
         game.make_move(0)
         game.make_move(4)
 
-        game.print()
-
         self.assertEqual(-math.inf, game.search(4)[0])
         game.make_move(2)
         self.assertEqual([math.inf, 6], game.search(3))
@@ -418,3 +416,235 @@ class TestBoard(unittest.TestCase):
         game.make_move(4)
 
         self.assertEqual(2, game.search(4)[1])
+
+    def test_threats_0(self):
+        # vertical threats
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+        # basic threats
+        game.make_move(0)
+        game.make_move(1)
+        game.make_move(0)
+        game.make_move(1)
+        game.make_move(0)
+        game.make_move(1)
+        # threats at different heights
+        game.make_move(3)
+        game.make_move(2)
+        game.make_move(2)
+        game.make_move(3)
+        game.make_move(2)
+        game.make_move(3)
+        game.make_move(2)
+        game.make_move(3)
+        # blocked threats
+        game.make_move(6)
+        game.make_move(5)
+        game.make_move(6)
+        game.make_move(5)
+        game.make_move(6)
+        game.make_move(5)
+        game.make_move(5)
+        game.make_move(6)
+
+        expected = [pow(2, 3) + pow(2, 18), pow(2, 10) + pow(2, 25)]
+        self.assertEqual(expected, game.threats())
+
+    def test_threats_1(self):
+        # vertical threats that shouldn't exist
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(1)
+        game.make_move(3)
+        game.make_move(6)
+        game.make_move(3)
+
+        self.assertEqual([0, 0], game.threats())
+
+    def test_threats_2(self):
+        # outside horizontal threats
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(1)
+        game.make_move(1)
+        game.make_move(2)
+        game.make_move(2)
+
+        expected = [pow(2, 0) + pow(2, 28), pow(2, 1) + pow(2, 29)]
+        self.assertEqual(expected, game.threats())
+
+    def test_threats_3(self):
+        # inside horizontal threats
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(1)
+        game.make_move(1)
+        game.make_move(0)
+        game.make_move(0)
+        game.make_move(5)
+        game.make_move(5)
+        game.make_move(6)
+        game.make_move(6)
+
+        expected = [pow(2, 14) + pow(2, 28), pow(2, 15) + pow(2, 29)]
+        self.assertEqual(expected, game.threats())
+
+    def test_threats_4(self):
+        # horizontal threats that shouldn't exist
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(0)
+        game.make_move(6)
+        game.make_move(1)
+        game.make_move(5)
+        game.make_move(2)
+        game.make_move(3)
+        game.make_move(4)
+        game.make_move(6)
+        game.make_move(0)
+        game.make_move(5)
+        game.make_move(6)
+        game.make_move(4)
+        game.make_move(3)
+
+        game.print()
+
+        self.assertEqual([0, 0], game.threats())
+
+
+    def test_threats_5(self):
+        # blocked horizontal threats
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(4)
+        game.make_move(2)
+        game.make_move(2)
+        game.make_move(4)
+        game.make_move(1)
+        game.make_move(1)
+        game.make_move(5)
+        game.make_move(6)
+        game.make_move(6)
+        game.make_move(5)
+
+        self.assertEqual([0, 0], game.threats())
+
+    def test_threats_6(self):
+        # positive outside diagonal threats
+        # negative inside diagonal threats
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(1)
+        game.make_move(2)
+        game.make_move(1)
+        game.make_move(1)
+
+        game.make_move(2)
+        game.make_move(3)
+        game.make_move(2)
+        game.make_move(2)
+        game.make_move(4)
+        game.make_move(3)
+        game.make_move(6)
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(6)
+        game.make_move(5)
+        game.make_move(5)
+
+        expected = [
+            pow(2, 32) + pow(2, 0) + pow(2, 30),
+            pow(2, 33) + pow(2, 1) + pow(2, 29)
+        ]
+        self.assertEqual(expected, game.threats())
+
+    def test_threats_7(self):
+        # negative outside diagonal threats
+        # positive inside diagonal threats
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(5)
+        game.make_move(4)
+        game.make_move(5)
+        game.make_move(5)
+
+        game.make_move(4)
+        game.make_move(3)
+        game.make_move(4)
+        game.make_move(4)
+        game.make_move(2)
+        game.make_move(3)
+        game.make_move(0)
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(0)
+        game.make_move(1)
+        game.make_move(1)
+
+        expected = [
+            pow(2, 42) + pow(2, 18) + pow(2, 16),
+            pow(2, 43) + pow(2, 19) + pow(2, 15)
+        ]
+        self.assertEqual(expected, game.threats())
+
+    def test_threats_8(self):
+        # diagonal threats that shouldn't exist
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_move(2)
+        game.make_move(4)
+        game.make_move(1)
+        game.make_move(5)
+        game.make_move(1)
+        game.make_move(5)
+        game.make_move(6)
+        game.make_move(0)
+        game.make_move(6)
+        game.make_move(0)
+        game.make_move(0)
+        game.make_move(6)
+
+        self.assertEqual([0, 0], game.threats())
+
+
+
+
+
