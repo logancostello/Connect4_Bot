@@ -529,10 +529,7 @@ class TestBoard(unittest.TestCase):
         game.make_move(4)
         game.make_move(3)
 
-        game.print()
-
         self.assertEqual([0, 0], game.threats())
-
 
     def test_threats_5(self):
         # blocked horizontal threats
@@ -644,7 +641,61 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual([0, 0], game.threats())
 
+    def test_threats_9(self):
+        # ignored threats above a double threat
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
 
+        game.make_move(3)
+        game.make_move(2)
+        game.make_move(3)
+        game.make_move(2)
+        game.make_move(6)
+        game.make_move(3)
+        game.make_move(6)
+        game.make_move(6)
+        game.make_move(5)
+        game.make_move(0)
+        game.make_move(5)
+        game.make_move(5)
+        game.make_move(5)
+        game.make_move(5)
 
+        expected = [pow(2, 28) + pow(2, 29), 0]
+        self.assertEqual(expected, game.threats())
 
+    def test_threats_10(self):
+        # test 2 double threats in the same column
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
 
+        game.make_move(0)
+        game.make_move(6)
+        game.make_move(0)
+        game.make_move(6)
+        game.make_move(1)
+        game.make_move(0)
+        game.make_move(1)
+        game.make_move(0)
+        game.make_move(3)
+        game.make_move(1)
+        game.make_move(3)
+        game.make_move(1)
+        game.make_move(1)
+        game.make_move(3)
+        game.make_move(1)
+        game.make_move(3)
+        game.make_move(3)
+        game.make_move(5)
+        game.make_move(3)
+        game.make_move(4)
+        game.make_move(0)
+        game.make_move(4)
+        game.make_move(0)
+
+        expected = [pow(2, 14) + pow(2, 15), 0]
+        self.assertEqual(expected, game.threats())
