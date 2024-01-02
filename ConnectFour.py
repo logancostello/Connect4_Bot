@@ -101,21 +101,41 @@ class ConnectFour:
         return move
 
     def minimax_strategy(self):
-        move = self.search(7)[1]
+        move = self.search(6)[1]
         self.make_move(move)
         return move
+
+    def evaluate(self):
+        score = 0
+
+        # reward having more threats than the opponent
+        score += self.threat_difference(self.threats())
+
+        return score
+
+    def threat_difference(self, threats):
+        num_threats = [0, 0]
+        for i in range(2):
+            mask = 1
+            while mask < pow(2, 48):
+                if mask & threats[i]:
+                    num_threats[i] += 1
+                mask <<= 1
+        return num_threats[self.turn % 2] - num_threats[(self.turn + 1) % 2]
 
     def search(self, depth, alpha=-math.inf, beta=math.inf):
         # negamax search algorithm with alpha-beta pruning
         if self.connect_four():
-            return [-math.inf, -1]
+            # using -1000 plays for quickest win/slowest loss. Using -infinity
+            # makes the search quicker, but doesn't result in the quickest win
+            return [-1000 + self.turn, -1]
         possible_moves = self.possible_moves()
         if depth == 0:
-            return [0, -1]  # return heuristic evaluation in future
+            return [self.evaluate(), -1]  # heuristic evaluation
         elif not possible_moves:
             return [0, -1]  # tie game
         best_move = possible_moves[0]
-        maxEval = float('-inf')
+        maxEval = -1000 + self.turn
         for move in possible_moves:
             self.make_move(move)
             score = -self.search(depth - 1, -beta, -alpha)[0]
