@@ -25,14 +25,8 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(0)
 
+        game.make_moves([0, 1, 0, 1, 0, 1, 0])
         self.assertEqual(True, game.connect_four())
 
     def test_connect_four_2(self):
@@ -40,14 +34,8 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(6)
 
+        game.make_moves([6, 6, 6, 6, 6, 6])
         self.assertEqual(False, game.connect_four())
 
     def test_connect_four_3(self):
@@ -56,17 +44,8 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(3)
-        game.make_move(0)
-        game.make_move(3)
-        game.make_move(0)
-        game.make_move(3)
-        game.make_move(1)
 
+        game.make_moves([0, 0, 0, 0, 3, 0, 3, 0, 3, 1])
         self.assertEqual(False, game.connect_four())
 
     def test_connect_four_4(self):
@@ -82,14 +61,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(3)
-
+        game.make_moves([0, 0, 1, 1, 2, 2, 3])
         self.assertEqual(True, game.connect_four())
 
     def test_connect_four_6(self):
@@ -117,14 +89,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(3)
-
+        game.make_moves([0, 1, 1, 1, 2, 2, 3])
         self.assertEqual(False, game.connect_four())
 
     def test_connect_four_9(self):
@@ -140,18 +105,8 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(3)
 
+        game.make_moves([0, 1, 1, 2, 2, 3, 2, 3, 3, 4, 3])
         self.assertEqual(True, game.connect_four())
 
     def test_connect_four_11(self):
@@ -159,17 +114,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(4)
-        game.make_move(5)
-        game.make_move(4)
-        game.make_move(4)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-
+        game.make_moves([5, 6, 4, 5, 4, 4, 3, 3, 3, 3])
         self.assertEqual(True, game.connect_four())
 
     def test_connect_four_12(self):
@@ -195,8 +140,8 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        moves = [0, 1, 2, 3, 4, 5, 6]
 
+        moves = [0, 1, 2, 3, 4, 5, 6]
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_1(self):
@@ -204,10 +149,9 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        for i in range(6):
-            game.make_move(0)
-        moves = [1, 2, 3, 4, 5, 6]
 
+        game.make_moves([0, 0, 0, 0, 0, 0])
+        moves = [1, 2, 3, 4, 5, 6]
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_2(self):
@@ -216,9 +160,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
         for i in range(6):
-            game.make_move(4)
-            game.make_move(5)
-            game.make_move(6)
+            game.make_moves([4, 5, 6])
         moves = [0, 1, 2, 3]
 
         self.assertEqual(moves, game.possible_moves())
@@ -229,13 +171,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
         for i in range(6):
-            game.make_move(0)
-            game.make_move(1)
-            game.make_move(2)
-            game.make_move(3)
-            game.make_move(4)
-            game.make_move(5)
-            game.make_move(6)
+            game.make_moves([0, 1, 2, 3, 4, 5, 6])
         moves = []
 
         self.assertEqual(moves, game.possible_moves())
@@ -262,8 +198,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(0)
-        game.make_move(0)
+        game.make_moves([0, 0])
 
         self.assertEqual(1, game.board[0])
         self.assertEqual(2, game.board[1])
@@ -276,8 +211,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(5)
-        game.make_move(5)
+        game.make_moves([5, 5])
 
         self.assertEqual(pow(2, 35), game.board[0])
         self.assertEqual(pow(2, 36), game.board[1])
@@ -290,9 +224,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(1)
+        game.make_moves([0, 1, 1])
 
         self.assertEqual(1 + pow(2, 8), game.board[0])
         self.assertEqual(pow(2, 7), game.board[1])
@@ -319,8 +251,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-        game.make_move(5)
-        game.make_move(5)
+        game.make_moves([5, 5])
         game.undo_move()
 
         self.assertEqual(pow(2, 35), game.board[0])
@@ -335,13 +266,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
         for i in range(6):
-            game.make_move(0)
-            game.make_move(1)
-            game.make_move(2)
-            game.make_move(3)
-            game.make_move(4)
-            game.make_move(5)
-            game.make_move(6)
+            game.make_moves([0, 1, 2, 3, 4, 5, 6])
         for i in range(42):
             game.undo_move()
 
@@ -357,10 +282,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(4)
+        game.make_moves([3, 3, 4, 4])
 
         self.assertEqual(2, game.search(3)[1])
         self.assertGreater(game.search(3)[0], 900)
@@ -376,35 +298,19 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(4)
-        game.make_move(5)
-        game.make_move(5)
-        game.make_move(3)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(3)
-        game.make_move(0)
-        game.make_move(4)
+        game.make_moves([3, 4, 4, 5, 5, 3, 5, 6, 3, 0, 4])
 
         self.assertLess(game.search(4)[0], -900)
         game.make_move(2)
         self.assertEqual(6, game.search(3)[1])
         self.assertGreater(game.search(3)[0], 900)
 
-
     def test_search_3(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(3)
+        game.make_moves([3, 2, 3, 4, 3])
 
         self.assertEqual(3, game.search(2)[1])
 
@@ -414,10 +320,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(4)
-
+        game.make_moves([3, 3, 4])
         self.assertEqual(2, game.search(4)[1])
 
     def test_threats_0(self):
@@ -427,30 +330,11 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
         # basic threats
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(0)
-        game.make_move(1)
+        game.make_moves([0, 1, 0, 1, 0, 1])
         # threats at different heights
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(3)
+        game.make_moves([3, 2, 2, 3, 2, 3, 2, 3])
         # blocked threats
-        game.make_move(6)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(5)
-        game.make_move(5)
-        game.make_move(6)
+        game.make_moves([6, 5, 6, 5, 6, 5, 5, 6])
 
         expected = [pow(2, 3) + pow(2, 18), pow(2, 10) + pow(2, 25)]
         self.assertEqual(expected, game.threats())
@@ -462,15 +346,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(1)
-        game.make_move(3)
-        game.make_move(6)
-        game.make_move(3)
-
+        game.make_moves([3, 3, 3, 3, 1, 3, 6, 3])
         self.assertEqual([0, 0], game.threats())
 
     def test_threats_2(self):
@@ -480,13 +356,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(2)
-        game.make_move(2)
-
+        game.make_moves([3, 3, 1, 1, 2, 2])
         expected = [pow(2, 0) + pow(2, 28), pow(2, 1) + pow(2, 29)]
         self.assertEqual(expected, game.threats())
 
@@ -497,17 +367,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(5)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(6)
-
+        game.make_moves([3, 3, 1, 1, 0, 0, 5, 5, 6, 6])
         expected = [pow(2, 14) + pow(2, 28), pow(2, 15) + pow(2, 29)]
         self.assertEqual(expected, game.threats())
 
@@ -518,20 +378,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(0)
-        game.make_move(6)
-        game.make_move(1)
-        game.make_move(5)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(6)
-        game.make_move(0)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(4)
-        game.make_move(3)
-
+        game.make_moves([0, 6, 1, 5, 2, 3, 4, 6, 0, 5, 6, 4, 3])
         self.assertEqual([0, 0], game.threats())
 
     def test_threats_5(self):
@@ -541,19 +388,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(4)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(5)
-
+        game.make_moves([3, 3, 4, 2, 2, 4, 1, 1, 5, 6, 6, 5])
         self.assertEqual([0, 0], game.threats())
 
     def test_threats_6(self):
@@ -563,25 +398,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
-
-        game.make_move(1)
-        game.make_move(2)
-        game.make_move(1)
-        game.make_move(1)
-
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(4)
-        game.make_move(3)
-        game.make_move(6)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(6)
-        game.make_move(5)
-        game.make_move(5)
+        game.make_moves([1, 2, 1, 1, 2, 3, 2, 2, 4, 3, 6, 3, 3, 3, 6, 5, 5])
 
         expected = [
             pow(2, 32) + pow(2, 0) + pow(2, 30),
@@ -597,25 +414,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(5)
-        game.make_move(4)
-        game.make_move(5)
-        game.make_move(5)
-
-        game.make_move(4)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(4)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(0)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(1)
-
+        game.make_moves([5, 4, 5, 5, 4, 3, 4, 4, 2, 3, 0, 3, 3, 3, 0, 1, 1])
         expected = [
             pow(2, 42) + pow(2, 18) + pow(2, 16),
             pow(2, 43) + pow(2, 19) + pow(2, 15)
@@ -629,21 +428,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(2)
-        game.make_move(4)
-        game.make_move(1)
-        game.make_move(5)
-        game.make_move(1)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(0)
-        game.make_move(6)
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(6)
-
-        game.print()
-
+        game.make_moves([2, 3, 1, 5, 1, 5, 6, 0, 6, 0, 0, 6])
         self.assertEqual([0, 0], game.threats())
 
     def test_threats_9(self):
@@ -652,22 +437,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(2)
-        game.make_move(4)
-        game.make_move(1)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(0)
-        game.make_move(6)
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(3)
-        game.make_move(3)
-
-        game.print()
-
+        game.make_moves([2, 3, 1, 5, 6, 0, 6, 0, 0, 6, 6, 3, 3])
         self.assertEqual([0, 0], game.threats())
 
     def test_threats_10(self):
@@ -677,21 +447,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(3)
-        game.make_move(2)
-        game.make_move(6)
-        game.make_move(3)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(5)
-        game.make_move(0)
-        game.make_move(5)
-        game.make_move(5)
-        game.make_move(5)
-        game.make_move(5)
-
+        game.make_moves([3, 2, 3, 2, 6, 3, 6, 6, 5, 0, 5, 5, 5, 5])
         expected = [pow(2, 28) + pow(2, 29), 0]
         self.assertEqual(expected, game.threats())
 
@@ -702,70 +458,10 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        game.make_move(0)
-        game.make_move(6)
-        game.make_move(0)
-        game.make_move(6)
-        game.make_move(1)
-        game.make_move(0)
-        game.make_move(1)
-        game.make_move(0)
-        game.make_move(3)
-        game.make_move(1)
-        game.make_move(3)
-        game.make_move(1)
-        game.make_move(1)
-        game.make_move(3)
-        game.make_move(1)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(5)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(0)
-        game.make_move(4)
-        game.make_move(0)
-
+        game.make_moves(
+            [0, 6, 0, 6, 1, 0, 1, 0, 3,
+             1, 3, 1, 1, 3, 1, 3, 3, 5, 3, 4, 0, 4, 0]
+        )
+        game.print()
         expected = [pow(2, 14) + pow(2, 15), 0]
         self.assertEqual(expected, game.threats())
-
-    def test_search_and_threats_0(self):
-        # based on a game I played against it where it messed up
-        game = ConnectFour(
-            ConnectFour.random_strategy,
-            ConnectFour.random_strategy
-        )
-
-        game.make_move(0)
-        game.make_move(3)
-        game.make_move(1)
-        game.make_move(4)
-        game.make_move(5)
-        game.make_move(4)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(3)
-        game.make_move(4)
-        game.make_move(0)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(0)
-        game.make_move(4)
-        game.make_move(5)
-        game.make_move(5)
-        game.make_move(5)
-        game.make_move(4)
-        game.make_move(3)
-        game.make_move(5)
-        game.make_move(6)
-        game.make_move(6)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(2)
-        game.make_move(2)
-
-        self.assertEqual(1, game.search(6)[1])
-        self.assertGreater(game.search(6)[0], 900)

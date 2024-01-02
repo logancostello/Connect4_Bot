@@ -36,7 +36,7 @@ class ConnectFour:
             for colNum in range(7):
                 mask = 1 << rowNum + 7 * colNum
                 if self.board[0] & mask:
-                    row.append('O')
+                    row.append('0')
                 elif self.board[1] & mask:
                     row.append('X')
                 else:
@@ -74,6 +74,10 @@ class ConnectFour:
         self.turn += 1
         self.heights[col] += 1
         self.moves.append(col)
+
+    def make_moves(self, moves):
+        for move in moves:
+            self.make_move(move)
 
     def undo_move(self):
         self.turn -= 1
