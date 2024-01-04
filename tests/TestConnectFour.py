@@ -1,4 +1,3 @@
-import math
 import unittest
 from ConnectFour import ConnectFour
 
@@ -465,3 +464,27 @@ class TestBoard(unittest.TestCase):
         game.print()
         expected = [pow(2, 14) + pow(2, 15), 0]
         self.assertEqual(expected, game.threats())
+
+    def test_positional_score_1(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([3, 3, 3, 3, 3, 3])
+        self.assertEqual(3, game.positional_score(game.board[0]))
+        self.assertEqual(
+            game.positional_score(game.board[0]),
+            game.positional_score(game.board[1])
+        )
+
+    def test_positional_score_2(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([0, 3, 1, 2, 6, 4, 5])
+        self.assertEqual(1.4, game.positional_score(game.board[0]))
+        self.assertEqual(1.7, game.positional_score(game.board[1]))
+

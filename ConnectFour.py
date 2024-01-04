@@ -114,8 +114,30 @@ class ConnectFour:
 
         # reward having more threats than the opponent
         score += self.threat_difference(self.threats())
+        score += self.positional_score(self.board[self.turn % 2])
+        score -= self.positional_score(self.board[(self.turn + 1) % 2])
 
         return score
+
+    def positional_score(self, board):
+        # values are the number of possible connect fours at that spot / 10
+        bonus_table = [
+            [.3, .4, .5, .7, .5, .4, .3],
+            [.4, .6, .8, 1, .8, .6, .4],
+            [.5, .8, 1.1, 1.3, 1.1, .8, .5],
+            [.5, .8, 1.1, 1.3, 1.1, .8, .5],
+            [.4, .6, .8, 1, .8, .6, .4],
+            [.3, .4, .5, .7, .5, .4, .3]
+        ]
+        mask = 1
+        score = 0
+        for i in range(7):
+            for j in range(6):
+                if mask & board:
+                    score += bonus_table[j][i]
+                mask <<= 1
+            mask <<= 1
+        return round(score, 6)
 
     def threat_difference(self, threats):
         num_threats = [0, 0]
