@@ -94,18 +94,30 @@ class ConnectFour:
     # the bot by having the bot face an older version of itself.
     #
     # SCORES [WIN, TIE, LOSS, TOTAL]
+    # PLAYER 1 AND 2 IN ORDER GIVEN
     # random_strategy vs random_strategy: [55411, 254, 44335, 100000]
     # minimax_depth_1_no_eval vs random_strategy: [840, 0, 160, 1000]
     # minimax_depth_2_no_eval vs random_strategy: [964, 1, 35, 1000]
     # minimax_depth_3_no_eval vs random_strategy: [953, 1, 46, 1000]
     # minimax_depth_4_no_eval vs random_strategy: [980, 0, 20, 1000]
+    # depth_4_num_threats_and_positional_eval vs random: [1000, 0, 0, 1000]
+    #
+    # START OF EACH PLAYER PLAYING BOTH SIDES
+    # depth_4_num_threats_eval vs depth_4_no_eval: [0, 1000, 0, 1000]
+    # depth_4_positional_eval vs depth_4_no_eval: [1000, 0, 0, 1000]
+    # depth_4_positional_eval vs depth_4_num_threats_eval: [500, 0, 500, 1000]
+
+    # the above results greatly confuse me. each player won every game as
+    # player two. additionally their different scores against no_eval surprises
+    # me. i will have the look into why these results occur
+
     def random_strategy(self):
         move = random.choice(self.possible_moves())
         self.make_move(move)
         return move
 
     def minimax_strategy(self):
-        move = self.search(6)[1]
+        move = self.search(4)[1]
         self.make_move(move)
         return move
 

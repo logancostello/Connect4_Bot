@@ -1,7 +1,6 @@
 from ConnectFour import ConnectFour
-BOT_STRATEGY_1 = ConnectFour.minimax_strategy
-BOT_STRATEGY_2 = ConnectFour.random_strategy
-NUM_GAMES = 1000
+BOT_STRATEGY_1 = ConnectFour.minimax_strategy_eval_positional
+BOT_STRATEGY_2 = ConnectFour.minimax_strategy
 
 
 def botVSHuman():
@@ -10,7 +9,7 @@ def botVSHuman():
     # game.strategy = game.first_move_strategy()
     game.print()
     while not game.connect_four():
-        if game.turn % 2:  # Player 2 turn
+        if not game.turn % 2:  # Player 2 turn
             move = input("Your move:")
             while int(move) not in game.possible_moves():
                 move = input("Invalid move. Enter different move:")
@@ -44,8 +43,9 @@ def playManyGames(numGames):
     score = [0, 0, 0]
     for x in range(numGames):
         score[botVSBot()] += 1
+        print("Game Number: ", x)
     print(score)
 
 
 if __name__ == '__main__':
-    playManyGames(1000)
+    playManyGames(10)
