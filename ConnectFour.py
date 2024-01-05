@@ -103,13 +103,9 @@ class ConnectFour:
     # depth_4_num_threats_and_positional_eval vs random: [1000, 0, 0, 1000]
     #
     # START OF EACH PLAYER PLAYING BOTH SIDES
-    # depth_4_num_threats_eval vs depth_4_no_eval: [0, 1000, 0, 1000]
-    # depth_4_positional_eval vs depth_4_no_eval: [1000, 0, 0, 1000]
-    # depth_4_positional_eval vs depth_4_num_threats_eval: [500, 0, 500, 1000]
-
-    # the above results greatly confuse me. each player won every game as
-    # player two. additionally their different scores against no_eval surprises
-    # me. i will have the look into why these results occur
+    # depth_4_num_threats_eval vs depth_4_no_eval: [416, 170, 414, 1000]
+    # depth_4_positional_eval vs depth_4_no_eval: [397, 212, 391, 1000]
+    # depth4_positional_eval vs depth4_num_threats_eval: [393, 169, 438, 1000]
 
     def random_strategy(self):
         move = random.choice(self.possible_moves())
@@ -121,11 +117,26 @@ class ConnectFour:
         self.make_move(move)
         return move
 
+    def minimax_strategy_positional_eval(self):
+        move = self.search_positional_eval(4)[1]
+        self.make_move(move)
+        return move
+
     def evaluate(self):
         score = 0
 
         # reward having more threats than the opponent
         score += self.threat_difference(self.threats())
+        # score += self.positional_score(self.board[self.turn % 2])
+        # score -= self.positional_score(self.board[(self.turn + 1) % 2])
+
+        return score
+
+    def evaluate_positional(self):
+        score = 0
+
+        # reward having more threats than the opponent
+        # score += self.threat_difference(self.threats())
         score += self.positional_score(self.board[self.turn % 2])
         score -= self.positional_score(self.board[(self.turn + 1) % 2])
 
@@ -170,6 +181,31 @@ class ConnectFour:
         possible_moves = self.possible_moves()
         if depth == 0:
             return [self.evaluate(), -1]  # heuristic evaluation
+        elif not possible_moves:
+            return [0, -1]  # tie game
+        best_move = possible_moves[0]
+        maxEval = -1000 + self.turn
+        for move in possible_moves:
+            self.make_move(move)
+            score = -self.search(depth - 1, -beta, -alpha)[0]
+            self.undo_move()
+            if score > maxEval:
+                maxEval = score
+                best_move = move
+            alpha = max(alpha, score)
+            if alpha > beta:
+                break
+        return [maxEval, best_move]
+
+    def search_positional_eval(self, depth, alpha=-math.inf, beta=math.inf):
+        # negamax search algorithm with alpha-beta pruning
+        if self.connect_four():
+            # using -1000 plays for quickest win/slowest loss. Using -infinity
+            # makes the search quicker, but doesn't result in the quickest win
+            return [-1000 + self.turn, -1]
+        possible_moves = self.possible_moves()
+        if depth == 0:
+            return [self.evaluate_positional(), -1]  # heuristic evaluation
         elif not possible_moves:
             return [0, -1]  # tie game
         best_move = possible_moves[0]
