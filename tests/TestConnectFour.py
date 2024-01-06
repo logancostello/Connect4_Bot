@@ -461,9 +461,20 @@ class TestBoard(unittest.TestCase):
             [0, 6, 0, 6, 1, 0, 1, 0, 3,
              1, 3, 1, 1, 3, 1, 3, 3, 5, 3, 4, 0, 4, 0]
         )
-        game.print()
         expected = [pow(2, 14) + pow(2, 15), 0]
         self.assertEqual(expected, game.threats())
+
+    def test_threats_12(self):
+        # case I ran into where a double threat clears all threats to the
+        # right of it
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([2, 3, 3, 4, 2, 4, 4, 0, 3, 5, 5, 0, 2])
+        self.assertEqual(pow(2, 42), game.threats()[1])
+
 
     def test_positional_score_1(self):
         game = ConnectFour(
@@ -487,4 +498,41 @@ class TestBoard(unittest.TestCase):
         game.make_moves([0, 3, 1, 2, 6, 4, 5])
         self.assertEqual(1.4, game.positional_score(game.board[0]))
         self.assertEqual(1.7, game.positional_score(game.board[1]))
+
+    def test_live_threats_0(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([3, 3, 4, 4, 2, 2])
+        threats = game.threats()
+        live_threats = game.live_threats(threats)
+        self.assertEqual(threats[0], live_threats[0])
+        self.assertEqual(0, live_threats[1])
+
+    def test_live_threats_1(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([0, 4, 0, 4, 0, 4])
+        threats = game.threats()
+        self.assertEqual(threats, game.live_threats(threats))
+
+    def test_live_threats_2(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([2, 3, 3, 4, 2, 4, 4, 0, 2, 0, 3, 5, 5])
+        game.print()
+        threats = game.threats()
+        self.assertEqual(threats[1], pow(2, 42))
+        self.assertEqual(
+            [pow(2, 17) + pow(2, 37), pow(2, 42)],
+            game.live_threats(threats)
+        )
 

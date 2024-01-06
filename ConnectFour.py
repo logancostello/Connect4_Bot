@@ -114,15 +114,21 @@ class ConnectFour:
         return move
 
     def minimax_strategy(self):
-        move = self.search(4)[1]
+        move = self.search(7)[1]
         self.make_move(move)
         return move
 
     def evaluate(self):
+        # 1 live threat for us is a win
+
+        # 2+ live threats for the opponent is a loss
+
         score = 0
 
         # reward having more threats than the opponent
         score += self.threat_difference(self.threats())
+
+        # reward having more pieces near the center
         score += self.positional_score(self.board[self.turn % 2])
         score -= self.positional_score(self.board[(self.turn + 1) % 2])
 
@@ -227,8 +233,19 @@ class ConnectFour:
                     clear_mask >>= 1
                 col |= col - 1
                 col = ~col
+                col &= col_mask << (j * 7)
                 mask = (pow(2, 48) - 1) ^ col
                 threats[0] &= mask
                 threats[1] &= mask
 
         return threats
+
+    def live_threats(self, threats):
+        # set top row so bottom row always thinks something is under it
+        board = self.board[0] | self.board[1] | 283691315109952
+        live_threats = [0, 0]
+        for i in range(2):
+            live_threats[i] = board << 1 & threats[i]
+        return live_threats
+
+
