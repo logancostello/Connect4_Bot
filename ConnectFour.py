@@ -107,6 +107,8 @@ class ConnectFour:
     # depth_4_positional_eval vs depth_4_no_eval: [879, 42, 79, 1000]
     # depth4_positional_eval vs depth4_num_threats_eval: [731, 71, 198, 1000]
     # depth4_positional_and_threats vs depth4_no_eval [933, 24, 43, 1000]
+    #
+    # depth4_live_stacked_threat_eval vs depth4_prev_eval [399, 244, 357, 1000]
 
     def random_strategy(self):
         move = random.choice(self.possible_moves())
@@ -114,7 +116,7 @@ class ConnectFour:
         return move
 
     def minimax_strategy(self):
-        move = self.search(7)[1]
+        move = self.search(4)[1]
         self.make_move(move)
         return move
 
