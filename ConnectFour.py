@@ -122,6 +122,7 @@ class ConnectFour:
         score = 0
         threats = self.threats()
         live_threats = self.live_threats(threats)
+        stacked_threats = self.stacked_threats(threats)
 
         # 1 live threat for us is a win
         if live_threats[self.turn % 2]:
@@ -130,6 +131,10 @@ class ConnectFour:
         # 2+ live threats for the opponent is a loss
         if self.count_board(live_threats[(self.turn + 1) % 2]) > 1:
             return -1000 + self.turn + 1
+
+        # strongly award stacked threats
+        score += self.count_board(stacked_threats[self.turn % 2]) * 5
+        score -= self.count_board(stacked_threats[(self.turn + 1) % 2]) * 5
 
         # reward having more threats than the opponent
         score += self.count_board(threats[self.turn % 2])
@@ -253,5 +258,12 @@ class ConnectFour:
         for i in range(2):
             live_threats[i] = board << 1 & threats[i]
         return live_threats
+
+    def stacked_threats(self, threats):
+        # returns bottom threat in a stacked double threats
+        stacked_threats = [0, 0]
+        for i in range(2):
+            stacked_threats[i] = threats[i] & (threats[i] >> 1)
+        return stacked_threats
 
 
