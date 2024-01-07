@@ -109,6 +109,10 @@ class ConnectFour:
     # depth4_positional_and_threats vs depth4_no_eval [933, 24, 43, 1000]
     #
     # depth4_live_stacked_threat_eval vs depth4_prev_eval [399, 244, 357, 1000]
+    #
+    # EFFICIENCY PROGRESS TRACKING: 500 games against itself
+    # before move ordering: 17.38 minutes
+    # center first move ordering: 7.51 minutes
 
     def random_strategy(self):
         move = random.choice(self.possible_moves())
@@ -184,6 +188,8 @@ class ConnectFour:
             # makes the search quicker, but doesn't result in the quickest win
             return [-1000 + self.turn, -1]
         possible_moves = self.possible_moves()
+        # look at moves closer to the center first, as they will likely be good
+        possible_moves.sort(key=score_move)
         if depth == 0:
             return [self.evaluate(), -1]  # heuristic evaluation
         elif not possible_moves:
@@ -267,5 +273,9 @@ class ConnectFour:
         for i in range(2):
             stacked_threats[i] = threats[i] & (threats[i] >> 1)
         return stacked_threats
+
+
+def score_move(move):
+    return abs(3 - move)
 
 
