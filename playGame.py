@@ -1,3 +1,5 @@
+import time
+
 from ConnectFour import ConnectFour
 BOT_STRATEGY_1 = ConnectFour.minimax_strategy
 BOT_STRATEGY_2 = ConnectFour.minimax_strategy
@@ -52,4 +54,7 @@ def playManyGames(numGamesEachSide):
 
 
 if __name__ == '__main__':
-    botVSHuman()
+    start = time.time()
+    playManyGames(250)
+    end = time.time()
+    print(round((end - start) / 60, 2), "minutes")
