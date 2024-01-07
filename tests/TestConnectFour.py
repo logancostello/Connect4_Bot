@@ -528,11 +528,29 @@ class TestBoard(unittest.TestCase):
         )
 
         game.make_moves([2, 3, 3, 4, 2, 4, 4, 0, 2, 0, 3, 5, 5])
-        game.print()
         threats = game.threats()
         self.assertEqual(threats[1], pow(2, 42))
         self.assertEqual(
             [pow(2, 17) + pow(2, 37), pow(2, 42)],
             game.live_threats(threats)
         )
+
+    def test_evaluate_0(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([3, 3, 4, 4, 5, 5])
+        self.assertEqual(game.evaluate(), 993)
+
+    def test_evaluate_1(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([3, 3, 4, 4, 5, 5, 0])
+        self.assertEqual(game.evaluate(), -992)
+
 

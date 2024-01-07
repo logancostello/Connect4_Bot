@@ -119,14 +119,21 @@ class ConnectFour:
         return move
 
     def evaluate(self):
+        score = 0
+        threats = self.threats()
+        live_threats = self.live_threats(threats)
+
         # 1 live threat for us is a win
+        if live_threats[self.turn % 2]:
+            return 1000 - self.turn - 1
 
         # 2+ live threats for the opponent is a loss
-
-        score = 0
+        if self.count_board(live_threats[(self.turn + 1) % 2]) > 1:
+            return -1000 + self.turn + 1
 
         # reward having more threats than the opponent
-        score += self.threat_difference(self.threats())
+        score += self.count_board(threats[self.turn % 2])
+        score -= self.count_board(threats[(self.turn + 1) % 2])
 
         # reward having more pieces near the center
         score += self.positional_score(self.board[self.turn % 2])
@@ -154,15 +161,14 @@ class ConnectFour:
             mask <<= 1
         return round(score, 6)
 
-    def threat_difference(self, threats):
-        num_threats = [0, 0]
-        for i in range(2):
-            mask = 1
-            while mask < pow(2, 48):
-                if mask & threats[i]:
-                    num_threats[i] += 1
-                mask <<= 1
-        return num_threats[self.turn % 2] - num_threats[(self.turn + 1) % 2]
+    def count_board(self, board):
+        count = 0
+        mask = 1
+        while mask < pow(2, 48):
+            if mask & board:
+                count += 1
+            mask <<= 1
+        return count
 
     def search(self, depth, alpha=-math.inf, beta=math.inf):
         # negamax search algorithm with alpha-beta pruning
