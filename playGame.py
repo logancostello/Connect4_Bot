@@ -52,4 +52,4 @@ def playManyGames(numGamesEachSide):
 
 
 if __name__ == '__main__':
-    playManyGames(500)
+    botVSHuman()

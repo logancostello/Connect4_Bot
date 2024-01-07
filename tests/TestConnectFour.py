@@ -553,4 +553,24 @@ class TestBoard(unittest.TestCase):
         game.make_moves([3, 3, 4, 4, 5, 5, 0])
         self.assertEqual(game.evaluate(), -992)
 
+    def test_stacked_threats_0(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([0, 6, 0, 0, 1, 6, 1, 1, 2, 6, 2, 2])
+        threats = game.threats()
+        self.assertEqual([pow(2, 21), 0], game.stacked_threats(threats))
+
+    def test_stacked_threats_1(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([5, 2, 3, 3, 4, 4, 2, 4, 0, 2, 0, 3, 0, 4])
+        threats = game.threats()
+        self.assertEqual([0, pow(2, 37)], game.stacked_threats(threats))
+
 
