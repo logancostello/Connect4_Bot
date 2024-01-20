@@ -110,9 +110,12 @@ class ConnectFour:
     #
     # depth4_live_stacked_threat_eval vs depth4_prev_eval [399, 244, 357, 1000]
     #
-    # EFFICIENCY PROGRESS TRACKING: 500 games against itself
-    # before move ordering: 17.38 minutes
+    # EFFICIENCY PROGRESS TRACKING: 500 games against itself (depth 4)
+    # negamax w/o alpha-beta pruning: 28.57 minutes
+    # alpha-beta pruning: 17.38 minutes
     # center first move ordering: 7.51 minutes
+    # Transposition table: 20.28 minutes
+    # All together: 6.05 minutes
 
     def random_strategy(self):
         move = random.choice(self.possible_moves())
@@ -150,7 +153,7 @@ class ConnectFour:
         score += self.positional_score(self.board[self.turn % 2])
         score -= self.positional_score(self.board[(self.turn + 1) % 2])
 
-        return score
+        return round(score, 2)
 
     def positional_score(self, board):
         # values are the number of possible connect fours at that spot / 10
@@ -181,24 +184,39 @@ class ConnectFour:
             mask <<= 1
         return count
 
-    def search(self, depth, alpha=-math.inf, beta=math.inf):
+    def search(self, depth, alpha=-math.inf, beta=math.inf, tt=None):
         # negamax search algorithm with alpha-beta pruning
-        if self.connect_four():
+        if tt is None:
+            tt = {}
+
+        if tuple(self.board) in tt:
+            return tt[tuple(self.board)]
+
+        elif self.connect_four():
             # using -1000 plays for quickest win/slowest loss. Using -infinity
             # makes the search quicker, but doesn't result in the quickest win
+            tt[tuple(self.board)] = [-1000 + self.turn, -1]
             return [-1000 + self.turn, -1]
+
+        elif depth == 0:
+            evaluation = self.evaluate()
+            tt[tuple(self.board)] = [evaluation, -1]
+            return [evaluation, -1]  # heuristic evaluation
+
+        # look at moves closer to the center first, as they will likely be
+        # good, causing more pruning and faster search
         possible_moves = self.possible_moves()
-        # look at moves closer to the center first, as they will likely be good
         possible_moves.sort(key=score_move)
-        if depth == 0:
-            return [self.evaluate(), -1]  # heuristic evaluation
-        elif not possible_moves:
+
+        if not possible_moves:
+            tt[tuple(self.board)] = [0, -1]
             return [0, -1]  # tie game
+
         best_move = possible_moves[0]
         maxEval = -1000 + self.turn
         for move in possible_moves:
             self.make_move(move)
-            score = -self.search(depth - 1, -beta, -alpha)[0]
+            score = -self.search(depth - 1, -beta, -alpha, tt)[0]
             self.undo_move()
             if score > maxEval:
                 maxEval = score
@@ -206,6 +224,7 @@ class ConnectFour:
             alpha = max(alpha, score)
             if alpha > beta:
                 break
+        tt[tuple(self.board)] = [maxEval, best_move]
         return [maxEval, best_move]
 
     def threats(self):

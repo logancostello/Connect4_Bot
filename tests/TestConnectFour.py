@@ -304,16 +304,15 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(6, game.search(3)[1])
         self.assertGreater(game.search(3)[0], 900)
 
-    def test_search_3(self):
+    def test_search_2(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
         game.make_moves([3, 2, 3, 4, 3])
-
         self.assertEqual(3, game.search(2)[1])
 
-    def test_search_4(self):
+    def test_search_3(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
@@ -475,7 +474,6 @@ class TestBoard(unittest.TestCase):
         game.make_moves([2, 3, 3, 4, 2, 4, 4, 0, 3, 5, 5, 0, 2])
         self.assertEqual(pow(2, 42), game.threats()[1])
 
-
     def test_positional_score_1(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
@@ -583,5 +581,3 @@ class TestBoard(unittest.TestCase):
         moves.sort(key=score_move)
 
         self.assertEqual(moves, [3, 2, 4, 1, 5, 0, 6])
-
-
