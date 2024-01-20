@@ -178,8 +178,9 @@ It is generally a good strategy to occupy the middle of the board when playing c
 ]
 ```
 ## Tracking Progress
-Throughout the development of this project (and during future development), I have been tracking the progress of the bot by making it by many games against different versions of itself. While these tests do not have massive sample sizes, they show some insight as to how much an additional feature improved the skill of the bot. I did not track every small addition, but I tried to track major ones.
+Throughout the development of this project (and during future development), I have been tracking the progress of the bot by making it by many games against different versions of itself. While these tests do not have massive sample sizes, they show some insight as to how much an additional feature improved the skill/speed of the bot. I did not track every small addition, but I tried to track major ones.
 
+### Skill Progress
 The tests consisted of hundreds/thousands of games and the scores are recorded in this format: 
 
 **opponent1 [WINS, TIES, LOSSES] opponent2 (TOTAL GAMES)**
@@ -198,6 +199,16 @@ NEGAMAX: depth 4, positional eval, number threats eval [933, 24, 43] NEGAMAX: de
 NEGAMAX: depth 4, live threats, stacked threats, number threats, positional eval [399, 244, 357] NEGAMAX: depth 4, positional eval, number threats eval (1000)
 
 *the first player listed always went first. all other tests had each player play first an equal amount*
+```
+
+### Speed Progress
+The tests consisted of running the bot against itself for 500 games at depth 4. Here are the results:
+```
+Negamax w/o alpha-beta pruning: 28.57 minutes
+Alpha-beta pruning: 17.38 minutes
+Center first move ordering: 7.51 minutes
+Transposition table: 20.28 minutes
+Total: 6.05 minutes
 ```
 
 
