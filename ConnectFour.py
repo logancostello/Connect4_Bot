@@ -293,6 +293,19 @@ class ConnectFour:
             stacked_threats[i] = threats[i] & (threats[i] >> 1)
         return stacked_threats
 
+    def mirror_board(self):
+        mirrored = [0, 0]
+        mask = pow(2, 6) - 1
+        for i in range(2):
+            mirrored[i] |= (self.board[i] & mask) << 42
+            mirrored[i] |= (self.board[i] & (mask << 7)) << 28
+            mirrored[i] |= (self.board[i] & (mask << 14)) << 14
+            mirrored[i] |= self.board[i] & (mask << 21)
+            mirrored[i] |= (self.board[i] & mask << 28) >> 14
+            mirrored[i] |= (self.board[i] & (mask << 35)) >> 28
+            mirrored[i] |= (self.board[i] & (mask << 42)) >> 42
+        return mirrored
+
 
 def score_move(move):
     return abs(3 - move)

@@ -581,3 +581,15 @@ class TestBoard(unittest.TestCase):
         moves.sort(key=score_move)
 
         self.assertEqual(moves, [3, 2, 4, 1, 5, 0, 6])
+
+    def test_mirrored_0(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves(
+            [3, 3, 3, 3, 2, 2, 4, 4, 0, 0, 0, 0, 6, 6, 6, 6, 1, 1, 5, 5]
+                        )
+
+        self.assertEqual(game.board, game.mirror_board())
