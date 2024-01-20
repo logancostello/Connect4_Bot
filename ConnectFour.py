@@ -186,11 +186,21 @@ class ConnectFour:
 
     def search(self, depth, alpha=-math.inf, beta=math.inf, tt=None):
         # negamax search algorithm with alpha-beta pruning
+
+        # this ensures the table is cleared each run
         if tt is None:
             tt = {}
 
+        # check if position has been found
         if tuple(self.board) in tt:
             return tt[tuple(self.board)]
+
+        # check if mirror position has been found
+        mirrored_board = self.mirror_board()
+        if tuple(mirrored_board) in tt:
+            result = tt[tuple(mirrored_board)]
+            result[1] = 6 - result[1]
+            return result
 
         elif self.connect_four():
             # using -1000 plays for quickest win/slowest loss. Using -infinity
