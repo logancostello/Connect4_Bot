@@ -44,6 +44,7 @@ def botVSBot(strat1, strat2):
 
 
 def playManyGames(numGamesEachSide):
+    start = time.time()
     score = [0, 0, 0]
     for x in range(numGamesEachSide):
         score[botVSBot(BOT_STRATEGY_1, BOT_STRATEGY_2)] += 1
@@ -51,10 +52,14 @@ def playManyGames(numGamesEachSide):
         score[2 - botVSBot(BOT_STRATEGY_2, BOT_STRATEGY_1)] += 1
         print("Game Number: ", x * 2 + 1)
     print(score)
+    end = time.time()
+    print(round((end - start) / 60, 2), "minutes")
 
 
 if __name__ == '__main__':
-    start = time.time()
     playManyGames(250)
-    end = time.time()
-    print(round((end - start) / 60, 2), "minutes")
+
+
+
+
+
