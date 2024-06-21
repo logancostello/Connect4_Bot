@@ -87,36 +87,6 @@ class ConnectFour:
         mask ^= pow(2, 48) - 1
         self.board[self.turn % 2] &= mask
 
-    # Under this comment are multiple "strategies" that the bot may play. When
-    # in an actual game, it will only play the one it is given by the user.
-    # However, the reasoning behind leaving the many strategies here (even
-    # though only one will be the best) is to be able to view the progress of
-    # the bot by having the bot face an older version of itself.
-    #
-    # SCORES [WIN, TIE, LOSS, TOTAL]
-    # PLAYER 1 AND 2 IN ORDER GIVEN
-    # random_strategy vs random_strategy: [55411, 254, 44335, 100000]
-    # minimax_depth_1_no_eval vs random_strategy: [840, 0, 160, 1000]
-    # minimax_depth_2_no_eval vs random_strategy: [964, 1, 35, 1000]
-    # minimax_depth_3_no_eval vs random_strategy: [953, 1, 46, 1000]
-    # minimax_depth_4_no_eval vs random_strategy: [980, 0, 20, 1000]
-    # depth_4_num_threats_and_positional_eval vs random: [1000, 0, 0, 1000]
-    #
-    # START OF EACH PLAYER PLAYING BOTH SIDES
-    # depth_4_num_threats_eval vs depth_4_no_eval: [719, 144, 137, 1000]
-    # depth_4_positional_eval vs depth_4_no_eval: [879, 42, 79, 1000]
-    # depth4_positional_eval vs depth4_num_threats_eval: [731, 71, 198, 1000]
-    # depth4_positional_and_threats vs depth4_no_eval [933, 24, 43, 1000]
-    #
-    # depth4_live_stacked_threat_eval vs depth4_prev_eval [399, 244, 357, 1000]
-    #
-    # EFFICIENCY PROGRESS TRACKING: 500 games against itself (depth 4)
-    # negamax w/o alpha-beta pruning: 28.57 minutes
-    # alpha-beta pruning: 17.38 minutes
-    # center first move ordering: 7.51 minutes
-    # Transposition table: 20.28 minutes
-    # All together: 6.05 minutes
-
     def random_strategy(self):
         move = random.choice(self.possible_moves())
         self.make_move(move)
@@ -315,7 +285,6 @@ class ConnectFour:
             mirrored[i] |= (self.board[i] & (mask << 35)) >> 28
             mirrored[i] |= (self.board[i] & (mask << 42)) >> 42
         return mirrored
-
 
 def score_move(move):
     return abs(3 - move)
