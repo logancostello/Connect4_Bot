@@ -1,7 +1,7 @@
 import pygame
 import sys
 from ConnectFour import ConnectFour
-
+import random
 
 # game board constants
 window_size = (800, 700)
@@ -13,16 +13,20 @@ empty_color = (255, 255, 255)
 red = (255, 0, 0)
 yellow = (255, 255, 0)
 
+
 def add_tuples(x, y):
     return tuple(map(lambda i, j: i + j, x, y))
 
+
 def mult_tuples(x, y):
     return tuple(map(lambda i, j: i * j, x, y))
+
 
 def getTurnColor(turn):
     if turn % 2 == 0:
         return red
     return yellow
+
 
 def getColFromMouse():
     position = pygame.mouse.get_pos()[0]
@@ -31,20 +35,26 @@ def getColFromMouse():
         column = -1  # out of bounds
     return column
 
+
 def playMoveInCol(screen, game, col):
     # bad move
     if col == -1 or col not in game.possible_moves():
-        return
+        return True
 
     # visually make move
     height0_pos = 550
     col0_pos = 100
     height_pos = height0_pos - 100 * game.heights[col]
     col_pos = col0_pos + 100 * col
-    pygame.draw.circle(screen, getTurnColor(game.turn), (col_pos, height_pos), piece_radius)
+    pygame.draw.circle(screen, getTurnColor(game.turn), (col_pos, height_pos),
+                       piece_radius)
 
     # make move
     game.make_move(col)
+
+    return False
+
+
 
 def handleConnectFour(screen, game):
     # display message
@@ -61,10 +71,9 @@ def handleConnectFour(screen, game):
     pygame.draw.rect(screen, board_color, bg_rect)
     screen.blit(text_surface, text_rect)
 
-
-
     # turn off mouse to prevent turns
     pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
+
 
 # setup game
 def setup_game():
@@ -93,22 +102,44 @@ def setup_game():
 
     return screen
 
-def playGame():
+
+def playGame(turn, alternate):
     screen = setup_game()
     game = ConnectFour(ConnectFour.minimax_strategy, ConnectFour.minimax_strategy)
     running = True
+
+    if not turn and not alternate:  # bot vs bot random start
+        playMoveInCol(screen, game, random.choice(game.possible_moves()))
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                print(getColFromMouse())
-                playMoveInCol(screen, game, getColFromMouse())
+            # if turn and event.type == pygame.MOUSEBUTTONDOWN:  # human turn
+            #     print(getColFromMouse())
+            #     playMoveInCol(screen, game, getColFromMouse())
+
+        if turn:
+            waitingForMove = True
+            while waitingForMove:
+                event = pygame.event.wait().type
+                if event == pygame.QUIT:
+                    running = False
+                    waitingForMove = False
+                elif event == pygame.MOUSEBUTTONDOWN:
+                    waitingForMove = playMoveInCol(screen, game, getColFromMouse())
+
+
+        if not turn:  # bot turn
+            bot_move = game.search(7)[1]
+            playMoveInCol(screen, game, bot_move)
+            #time.sleep(1)
 
         if game.connect_four():
             handleConnectFour(screen, game)
 
+        if alternate:
+            turn = not turn
 
         # update
         pygame.display.flip()
@@ -117,5 +148,6 @@ def playGame():
     pygame.quit()
     sys.exit()
 
+
 if __name__ == '__main__':
-    playGame()
+    playGame(True, True)
