@@ -1,14 +1,37 @@
 import time
 
 from ConnectFour import ConnectFour
+
 BOT_STRATEGY_1 = ConnectFour.minimax_strategy
 BOT_STRATEGY_2 = ConnectFour.minimax_strategy
+
+
+def humanVSHuman():
+    print("Starting game")
+    game = ConnectFour(BOT_STRATEGY_1, BOT_STRATEGY_2)
+    game.print()
+    while not game.connect_four():
+        if not game.turn % 2:  # Player 2 turn
+            move = input("Player 1 move:")
+            while int(move) not in game.possible_moves():
+                move = input("Invalid move. Enter different move:")
+            game.make_move(int(move))
+            game.print()
+        else:  # player 1 turn
+            move = input("Player 2 move:")
+            while int(move) not in game.possible_moves():
+                move = input("Invalid move. Enter different move:")
+            game.make_move(int(move))
+            game.print()
+    if game.turn % 2:
+        print("Player One Wins")
+    else:
+        print("Player Two Wins")
 
 
 def botVSHuman():
     print("Starting game")
     game = ConnectFour(BOT_STRATEGY_1, BOT_STRATEGY_2)
-    # game.strategy = game.first_move_strategy()
     game.print()
     while not game.connect_four():
         if not game.turn % 2:  # Player 2 turn
@@ -57,9 +80,4 @@ def playManyGames(numGamesEachSide):
 
 
 if __name__ == '__main__':
-    playManyGames(250)
-
-
-
-
-
+    humanVSHuman()
