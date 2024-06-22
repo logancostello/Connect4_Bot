@@ -108,16 +108,14 @@ def playGame(turn, alternate):
     game = ConnectFour(ConnectFour.minimax_strategy, ConnectFour.minimax_strategy)
     running = True
 
-    if not turn and not alternate:  # bot vs bot random start
+    # bot vs bot random start
+    if not turn and not alternate:
         playMoveInCol(screen, game, random.choice(game.possible_moves()))
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            # if turn and event.type == pygame.MOUSEBUTTONDOWN:  # human turn
-            #     print(getColFromMouse())
-            #     playMoveInCol(screen, game, getColFromMouse())
 
         if turn:
             waitingForMove = True
@@ -150,4 +148,4 @@ def playGame(turn, alternate):
 
 
 if __name__ == '__main__':
-    playGame(True, True)
+    playGame(False, False)
