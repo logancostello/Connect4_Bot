@@ -118,13 +118,25 @@ def speedProgress(depth):
 
     print(results)
 
+    avg_improvement([0.18, 1.08, 0.71, 0.3, 0.56, 1.15], [0.11, 0.67, 0.44, 0.19, 0.35, 0.71])
+
+def avg_improvement(old, new):
+    print(round((sum([old[i]/new[i] for i in range(6)]) / 6), 2))
+
+
 if __name__ == '__main__':
-    speedProgress(7)
+    # speedProgress(7)
+    avg_improvement([0.18, 1.08, 0.71, 0.3, 0.56, 1.15], [0.11, 0.67, 0.44, 0.19, 0.35, 0.71])
 
 
-# pre-refactor speeds (in seconds)
+
+# pre-refactor
 # [0.18, 1.08, 0.71, 0.3, 0.56, 1.15]
+# 1x faster than pre-refactor
 
+# heights list --> heights dictionary
+# [0.11, 0.67, 0.44, 0.19, 0.35, 0.71]
+# 1.61x faster than pre-refactor
 
 # ----- OLD PROGRESS INFO ------
 # Under this comment are multiple "strategies" that the bot may play. When
