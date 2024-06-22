@@ -147,14 +147,14 @@ class ConnectFour:
 
     def search(self, depth, alpha=-math.inf, beta=math.inf, tt=None):
         # negamax search algorithm with alpha-beta pruning
-
+        tuple_board = tuple(self.board)
         # this ensures the table is cleared each run
         if tt is None:
             tt = {}
 
         # check if position has been found
-        if tuple(self.board) in tt:
-            return tt[tuple(self.board)]
+        if tuple_board in tt:
+            return tt[tuple_board]
 
         # check if mirror position has been found
         mirrored_board = self.mirror_board()
@@ -166,12 +166,12 @@ class ConnectFour:
         elif self.connect_four():
             # using -1000 plays for quickest win/slowest loss. Using -infinity
             # makes the search quicker, but doesn't result in the quickest win
-            tt[tuple(self.board)] = [-1000 + self.turn, -1]
+            tt[tuple_board] = [-1000 + self.turn, -1]
             return [-1000 + self.turn, -1]
 
         elif depth == 0:
             evaluation = self.evaluate()
-            tt[tuple(self.board)] = [evaluation, -1]
+            tt[tuple_board] = [evaluation, -1]
             return [evaluation, -1]  # heuristic evaluation
 
         # look at moves closer to the center first, as they will likely be
@@ -180,7 +180,7 @@ class ConnectFour:
         possible_moves.sort(key=score_move)
 
         if not possible_moves:
-            tt[tuple(self.board)] = [0, -1]
+            tt[tuple_board] = [0, -1]
             return [0, -1]  # tie game
 
         best_move = possible_moves[0]
@@ -195,7 +195,7 @@ class ConnectFour:
             alpha = max(alpha, score)
             if alpha > beta:
                 break
-        tt[tuple(self.board)] = [maxEval, best_move]
+        tt[tuple_board] = [maxEval, best_move]
         return [maxEval, best_move]
 
     def threats(self):

@@ -104,6 +104,8 @@ def speedProgress(depth):
     avg_time = round(total_time / 100, 2)
     results.append(avg_time)
 
+    print(results)
+
     # random position 2
     game = ConnectFour(BOT_STRATEGY_1, BOT_STRATEGY_1)
     game.make_moves([3, 4, 4, 5, 5, 3, 5, 6, 3, 0, 4])
@@ -141,6 +143,10 @@ if __name__ == '__main__':
 # my bit counter --> python's bit counter
 # [0.07, 0.51, 0.33, 0.14, 0.29, 0.89]
 # 2.03x faster than pre-refactor
+
+# store tuple(self.board) in memory for search
+# [0.07, 0.5, 0.32, 0.14, 0.27, 0.87]
+# 2.08x faster than pre-refactor
 
 # ----- OLD PROGRESS INFO ------
 # Under this comment are multiple "strategies" that the bot may play. When
