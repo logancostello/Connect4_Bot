@@ -227,7 +227,7 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(1 + pow(2, 8), game.board[0])
         self.assertEqual(pow(2, 7), game.board[1])
-        self.assertEqual([1, 2, 0, 0, 0, 0, 0], game.heights)
+        self.assertEqual({0: 1, 1: 2, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}, game.heights)
         self.assertEqual([0, 1, 1], game.moves)
         self.assertEqual(3, game.turn)
 
@@ -271,7 +271,7 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(0, game.board[0])
         self.assertEqual(0, game.board[1])
-        self.assertEqual([0, 0, 0, 0, 0, 0, 0], game.heights)
+        self.assertEqual({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}, game.heights)
         self.assertEqual([], game.moves)
         self.assertEqual(0, game.turn)
 

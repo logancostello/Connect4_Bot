@@ -25,7 +25,7 @@ class ConnectFour:
         self.board = [0, 0]
         self.turn = 0
         self.moves = []
-        self.heights = [0, 0, 0, 0, 0, 0, 0]
+        self.heights = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
         self.player_1_turn = strat1.__get__(self)
         self.player_2_turn = strat2.__get__(self)
 
@@ -286,7 +286,6 @@ class ConnectFour:
             mirrored[i] |= (self.board[i] & (mask << 42)) >> 42
         return mirrored
 
+
 def score_move(move):
     return abs(3 - move)
-
-
