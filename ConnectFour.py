@@ -108,16 +108,16 @@ class ConnectFour:
             return 1000 - self.turn - 1
 
         # 2+ live threats for the opponent is a loss
-        if self.count_board(live_threats[(self.turn + 1) % 2]) > 1:
+        if live_threats[(self.turn + 1) % 2].bit_count() > 1:
             return -1000 + self.turn + 1
 
         # strongly award stacked threats
-        score += self.count_board(stacked_threats[self.turn % 2]) * 5
-        score -= self.count_board(stacked_threats[(self.turn + 1) % 2]) * 5
+        score += stacked_threats[self.turn % 2].bit_count() * 5
+        score -= stacked_threats[(self.turn + 1) % 2].bit_count() * 5
 
         # reward having more threats than the opponent
-        score += self.count_board(threats[self.turn % 2])
-        score -= self.count_board(threats[(self.turn + 1) % 2])
+        score += threats[self.turn % 2].bit_count()
+        score -= threats[(self.turn + 1) % 2].bit_count()
 
         # reward having more pieces near the center
         score += self.positional_score(self.board[self.turn % 2])
@@ -144,15 +144,6 @@ class ConnectFour:
                 mask <<= 1
             mask <<= 1
         return round(score, 6)
-
-    def count_board(self, board):
-        count = 0
-        mask = 1
-        while mask < pow(2, 48):
-            if mask & board:
-                count += 1
-            mask <<= 1
-        return count
 
     def search(self, depth, alpha=-math.inf, beta=math.inf, tt=None):
         # negamax search algorithm with alpha-beta pruning
