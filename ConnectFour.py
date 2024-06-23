@@ -211,43 +211,23 @@ class ConnectFour:
 
             # horizontal threats
             threats[i] |= ~b & my_b << 7 & my_b << 14 & my_b << 21
-            threats[i] |= (my_b & ~b << 7 & my_b << 14 & my_b << 21) >> 7
-            threats[i] |= (my_b & my_b << 7 & ~b << 14 & my_b << 21) >> 14
-            threats[i] |= (my_b & my_b << 7 & my_b << 14 & ~b << 21) >> 21
+            threats[i] |= my_b >> 7 & ~b & my_b << 7 & my_b << 14
+            threats[i] |= my_b >> 14 & my_b >> 7 & ~b & my_b << 7
+            threats[i] |= my_b >> 21 & my_b >> 14 & my_b >> 7 & ~b
 
             # positive diagonal threats
             threats[i] |= ~b & my_b << 8 & my_b << 16 & my_b << 24
-            threats[i] |= (my_b & ~b << 8 & my_b << 16 & my_b << 24) >> 8
-            threats[i] |= (my_b & my_b << 8 & ~b << 16 & my_b << 24) >> 16
-            threats[i] |= (my_b & my_b << 8 & my_b << 16 & ~b << 24) >> 24
+            threats[i] |= my_b >> 8 & ~b & my_b << 8 & my_b << 16
+            threats[i] |= my_b >> 16 & my_b >> 8 & ~b & my_b << 8
+            threats[i] |= my_b >> 24 & my_b >> 16 & my_b >> 8 & ~b
 
             # negative diagonal threats
             threats[i] |= ~b & my_b << 6 & my_b << 12 & my_b << 18
-            threats[i] |= (my_b & ~b << 6 & my_b << 12 & my_b << 18) >> 6
-            threats[i] |= (my_b & my_b << 6 & ~b << 12 & my_b << 18) >> 12
-            threats[i] |= (my_b & my_b << 6 & my_b << 12 & ~b << 18) >> 18
+            threats[i] |= my_b >> 6 & ~b & my_b << 6 & my_b << 12
+            threats[i] |= my_b >> 12 & my_b >> 6 & ~b & my_b << 6
+            threats[i] |= my_b >> 18 & my_b >> 12 & my_b >> 6 & ~b
 
-        # when a player has 2 threats on top of each other, any other threats
-        # above those two are impossible to reach without the game ending,
-        # so we don't consider the above threats anymore
-        col_mask = pow(2, 6) - 1
-        for i in range(2):
-            for j in range(7):
-                col = threats[i] & (col_mask << (j * 7))
-                col &= col << 1
-                clear_mask = (pow(2, 5) - 1) << (j * 7)
-                # while runs until only the lowest double threat remains
-                while col != 0 and not round(math.log(col, 2), 6).is_integer():
-                    col &= clear_mask
-                    clear_mask >>= 1
-                col |= col - 1
-                col = ~col
-                col &= col_mask << (j * 7)
-                mask = (pow(2, 48) - 1) ^ col
-                threats[0] &= mask
-                threats[1] &= mask
-
-        return threats
+        return clean_unreachable_threats(threats)
 
     def live_threats(self, threats):
         # set top row so bottom row always thinks something is under it
@@ -280,3 +260,27 @@ class ConnectFour:
 
 def score_move(move):
     return abs(3 - move)
+
+def clean_unreachable_threats(threats):
+    # when a player has 2 threats on top of each other, any other threats
+    # above those two are impossible to reach without the game ending,
+    # so we don't consider the above threats anymore
+    col_mask = pow(2, 6) - 1
+    for i in range(2):
+        for j in range(7):
+            col = threats[i] & (col_mask << (j * 7))
+            col &= col << 1
+            clear_mask = (pow(2, 5) - 1) << (j * 7)
+            # while runs until only the lowest double threat remains
+            while col != 0 and not round(math.log(col, 2), 6).is_integer():
+                col &= clear_mask
+                clear_mask >>= 1
+            col |= col - 1
+            col = ~col
+            col &= col_mask << (j * 7)
+            mask = (pow(2, 48) - 1) ^ col
+            threats[0] &= mask
+            threats[1] &= mask
+
+    return threats
+
