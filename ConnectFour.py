@@ -101,7 +101,7 @@ class ConnectFour:
         score = 0
         threats = self.threats()
         live_threats = self.live_threats(threats)
-        stacked_threats = self.stacked_threats(threats)
+        stacked = stacked_threats(threats)
 
         # 1 live threat for us is a win
         if live_threats[self.turn % 2]:
@@ -112,8 +112,8 @@ class ConnectFour:
             return -1000 + self.turn + 1
 
         # strongly award stacked threats
-        score += stacked_threats[self.turn % 2].bit_count() * 5
-        score -= stacked_threats[(self.turn + 1) % 2].bit_count() * 5
+        score += stacked[self.turn % 2].bit_count() * 5
+        score -= stacked[(self.turn + 1) % 2].bit_count() * 5
 
         # reward having more threats than the opponent
         score += threats[self.turn % 2].bit_count()
@@ -237,13 +237,6 @@ class ConnectFour:
             live_threats[i] = board << 1 & threats[i]
         return live_threats
 
-    def stacked_threats(self, threats):
-        # returns bottom threat in a stacked double threats
-        stacked_threats = [0, 0]
-        for i in range(2):
-            stacked_threats[i] = threats[i] & (threats[i] >> 1)
-        return stacked_threats
-
     def mirror_board(self):
         mirrored = [0, 0]
         mask = pow(2, 6) - 1
@@ -283,4 +276,11 @@ def clean_unreachable_threats(threats):
             threats[1] &= mask
 
     return threats
+
+def stacked_threats(threats):
+    # returns bottom threat in a stacked double threats
+    stacked = [0, 0]
+    for i in range(2):
+        stacked[i] = threats[i] & (threats[i] >> 1)
+    return stacked
 

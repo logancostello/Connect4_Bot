@@ -1,5 +1,5 @@
 import unittest
-from ConnectFour import ConnectFour, score_move
+from ConnectFour import ConnectFour, score_move, stacked_threats
 
 
 class TestBoard(unittest.TestCase):
@@ -559,7 +559,7 @@ class TestBoard(unittest.TestCase):
 
         game.make_moves([0, 6, 0, 0, 1, 6, 1, 1, 2, 6, 2, 2])
         threats = game.threats()
-        self.assertEqual([pow(2, 21), 0], game.stacked_threats(threats))
+        self.assertEqual([pow(2, 21), 0], stacked_threats(threats))
 
     def test_stacked_threats_1(self):
         game = ConnectFour(
@@ -569,7 +569,7 @@ class TestBoard(unittest.TestCase):
 
         game.make_moves([5, 2, 3, 3, 4, 4, 2, 4, 0, 2, 0, 3, 0, 4])
         threats = game.threats()
-        self.assertEqual([0, pow(2, 37)], game.stacked_threats(threats))
+        self.assertEqual([0, pow(2, 37)], stacked_threats(threats))
 
     def test_move_ordering_0(self):
         game = ConnectFour(
