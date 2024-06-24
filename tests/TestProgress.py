@@ -148,8 +148,12 @@ if __name__ == '__main__':
 # [0.07, 0.5, 0.32, 0.14, 0.27, 0.87]
 # 2.08x faster than pre-refactor
 
+# refactored clean threats + shared threat logic
+# [0.06, 0.4, 0.25, 0.11, 0.22, 0.68]
+# 2.58x faster than pre-refactor
+
 # ----- OLD PROGRESS INFO ------
-# Under this comment are multiple "strategies" that the bot may play. When
+    # Under this comment are multiple "strategies" that the bot may play. When
     # in an actual game, it will only play the one it is given by the user.
     # However, the reasoning behind leaving the many strategies here (even
     # though only one will be the best) is to be able to view the progress of

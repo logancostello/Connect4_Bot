@@ -255,27 +255,52 @@ def score_move(move):
     return abs(3 - move)
 
 def clean_unreachable_threats(threats):
-    # when a player has 2 threats on top of each other, any other threats
-    # above those two are impossible to reach without the game ending,
-    # so we don't consider the above threats anymore
+    # threats will never be reached if they are above a double threat
+    # or if they are above a threat shared by both players
     col_mask = pow(2, 6) - 1
-    for i in range(2):
-        for j in range(7):
-            col = threats[i] & (col_mask << (j * 7))
-            col &= col << 1
-            clear_mask = (pow(2, 5) - 1) << (j * 7)
-            # while runs until only the lowest double threat remains
-            while col != 0 and not round(math.log(col, 2), 6).is_integer():
-                col &= clear_mask
-                clear_mask >>= 1
-            col |= col - 1
-            col = ~col
-            col &= col_mask << (j * 7)
-            mask = (pow(2, 48) - 1) ^ col
-            threats[0] &= mask
-            threats[1] &= mask
+    clean_maskA = 0
+    clean_maskB = 0
+    for i in range(7):
+        col = (col_mask << (i * 7))
 
-    return threats
+        # isolate column for each player
+        colA = threats[0] & col
+        colB = threats[1] & col
+
+        # find shared threat locations
+        shared = colA & colB
+
+        # find double threat locations (bottom threat)
+        doubleA = colA & (colA >> 1)
+        doubleB = colB & (colB >> 1)
+
+        # find the lowest set bit out of all above threats
+        combined = shared | doubleA | doubleB
+        lsb = combined & ~(combined - 1)
+        mask = (lsb | (lsb - 1)) & col
+
+        # if lsb is shared, clear everything above on both sides
+        if lsb & shared:
+            clean_maskA |= mask
+            clean_maskB |= mask
+
+        # if lsb is doubleA, clear everything above, but keep A double threat
+        elif lsb & doubleA:
+            clean_maskA |= (mask << 1) | mask
+            clean_maskB |= mask
+
+        # if lsb is doubleB, clear everything above, but keep B double threat
+        elif lsb & doubleB:
+            clean_maskA |= mask
+            clean_maskB |= (mask << 1) | mask
+
+        # if nothing to clean, keep the column
+        else:
+            clean_maskA |= col
+            clean_maskB |= col
+
+    # clean threats
+    return [threats[0] & clean_maskA, threats[1] & clean_maskB]
 
 def stacked_threats(threats):
     # returns bottom threat in a stacked double threats

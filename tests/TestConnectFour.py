@@ -1,5 +1,6 @@
 import unittest
-from ConnectFour import ConnectFour, score_move, stacked_threats
+from ConnectFour import ConnectFour, score_move, stacked_threats, \
+    clean_unreachable_threats
 
 
 class TestBoard(unittest.TestCase):
@@ -333,7 +334,6 @@ class TestBoard(unittest.TestCase):
         game.make_moves([3, 2, 2, 3, 2, 3, 2, 3])
         # blocked threats
         game.make_moves([6, 5, 6, 5, 6, 5, 5, 6])
-
         expected = [pow(2, 3) + pow(2, 18), pow(2, 10) + pow(2, 25)]
         self.assertEqual(expected, game.threats())
 
@@ -439,6 +439,17 @@ class TestBoard(unittest.TestCase):
         self.assertEqual([0, 0], game.threats())
 
     def test_threats_10(self):
+        # case I ran into where a double threat clears all threats to the
+        # right of it
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([2, 3, 3, 4, 2, 4, 4, 0, 3, 5, 5, 0, 2])
+        self.assertEqual(pow(2, 42), game.threats()[1])
+
+    def test_clean_threats_0(self):
         # ignored threats above a double threat
         game = ConnectFour(
             ConnectFour.random_strategy,
@@ -449,7 +460,7 @@ class TestBoard(unittest.TestCase):
         expected = [pow(2, 28) + pow(2, 29), 0]
         self.assertEqual(expected, game.threats())
 
-    def test_threats_11(self):
+    def test_clean_threats_1(self):
         # test 2 double threats in the same column
         game = ConnectFour(
             ConnectFour.random_strategy,
@@ -463,16 +474,25 @@ class TestBoard(unittest.TestCase):
         expected = [pow(2, 14) + pow(2, 15), 0]
         self.assertEqual(expected, game.threats())
 
-    def test_threats_12(self):
-        # case I ran into where a double threat clears all threats to the
-        # right of it
+    def test_clean_threats_2(self):
         game = ConnectFour(
             ConnectFour.random_strategy,
             ConnectFour.random_strategy
         )
 
-        game.make_moves([2, 3, 3, 4, 2, 4, 4, 0, 3, 5, 5, 0, 2])
-        self.assertEqual(pow(2, 42), game.threats()[1])
+        game.make_moves([0, 6, 1, 5, 2, 4, 0, 6, 1, 5, 2, 4])
+        expected = [pow(2, 21), pow(2, 21)]
+        self.assertEqual(expected, game.threats())
+
+    def test_clean_threats_3(self):
+        game = ConnectFour(
+            ConnectFour.random_strategy,
+            ConnectFour.random_strategy
+        )
+
+        game.make_moves([6, 0, 5, 1, 2, 4, 0, 6, 1, 5, 2, 4, 0, 6, 1, 5, 2, 4, 4, 2])
+        expected = [pow(2, 22), pow(2, 22)]
+        self.assertEqual(expected, game.threats())
 
     def test_positional_score_1(self):
         game = ConnectFour(
