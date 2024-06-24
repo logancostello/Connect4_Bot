@@ -2,7 +2,7 @@ import time
 from ConnectFour import ConnectFour
 
 BOT_STRATEGY_1 = ConnectFour.minimax_strategy
-BOT_STRATEGY_2 = ConnectFour.minimax_strategy
+BOT_STRATEGY_2 = ConnectFour.minimax_strategy2
 
 def botVSBot(strat1, strat2):
     game = ConnectFour(strat1, strat2)
@@ -127,10 +127,11 @@ def avg_improvement(old, new):
 
 
 if __name__ == '__main__':
-    speedProgress(7)
-
+    playManyGames(250)
 
 # ------ NEW PROGRESS INFO --------
+
+# SPEED PROGRESS:
 
 # pre-refactor (depth 7)
 # [0.18, 1.08, 0.71, 0.3, 0.56, 1.15]
@@ -148,9 +149,16 @@ if __name__ == '__main__':
 # [0.07, 0.5, 0.32, 0.14, 0.27, 0.87]
 # 2.08x faster than pre-refactor
 
-# refactored clean threats + shared threat logic
+# refactored clean threats
 # [0.06, 0.4, 0.25, 0.11, 0.22, 0.68]
 # 2.58x faster than pre-refactor
+
+# SKILL PROGRESS:
+# shared threat vs pre-refactor [233, 46, 221] (depth 7)
+
+
+
+
 
 # ----- OLD PROGRESS INFO ------
     # Under this comment are multiple "strategies" that the bot may play. When
