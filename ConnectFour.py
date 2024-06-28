@@ -97,42 +97,9 @@ class ConnectFour:
         self.make_move(move)
         return move
 
-    def minimax_strategy2(self):
-        move = self.search2(7)[1]
-        self.make_move(move)
-        return move
-
     def evaluate(self):
         score = 0
         threats = self.threats()
-        live_threats = self.live_threats(threats)
-        stacked = stacked_threats(threats)
-
-        # 1 live threat for us is a win
-        if live_threats[self.turn % 2]:
-            return 1000 - self.turn - 1
-
-        # 2+ live threats for the opponent is a loss
-        if live_threats[(self.turn + 1) % 2].bit_count() > 1:
-            return -1000 + self.turn + 1
-
-        # strongly award stacked threats
-        score += stacked[self.turn % 2].bit_count() * 5
-        score -= stacked[(self.turn + 1) % 2].bit_count() * 5
-
-        # reward having more threats than the opponent
-        score += threats[self.turn % 2].bit_count()
-        score -= threats[(self.turn + 1) % 2].bit_count()
-
-        # reward having more pieces near the center
-        score += self.positional_score(self.board[self.turn % 2])
-        score -= self.positional_score(self.board[(self.turn + 1) % 2])
-
-        return round(score, 2)
-
-    def evaluate2(self):
-        score = 0
-        threats = self.threats2()
         live_threats = self.live_threats(threats)
         stacked = stacked_threats(threats)
 
@@ -231,60 +198,6 @@ class ConnectFour:
         tt[tuple_board] = [maxEval, best_move]
         return [maxEval, best_move]
 
-
-    def search2(self, depth, alpha=-math.inf, beta=math.inf, tt=None):
-        # negamax search algorithm with alpha-beta pruning
-        tuple_board = tuple(self.board)
-        # this ensures the table is cleared each run
-        if tt is None:
-            tt = {}
-
-        # check if position has been found
-        if tuple_board in tt:
-            return tt[tuple_board]
-
-        # check if mirror position has been found
-        mirrored_board = self.mirror_board()
-        if tuple(mirrored_board) in tt:
-            result = tt[tuple(mirrored_board)]
-            result[1] = 6 - result[1]
-            return result
-
-        elif self.connect_four():
-            # using -1000 plays for quickest win/slowest loss. Using -infinity
-            # makes the search quicker, but doesn't result in the quickest win
-            tt[tuple_board] = [-1000 + self.turn, -1]
-            return [-1000 + self.turn, -1]
-
-        elif depth == 0:
-            evaluation = self.evaluate2()
-            tt[tuple_board] = [evaluation, -1]
-            return [evaluation, -1]  # heuristic evaluation
-
-        # look at moves closer to the center first, as they will likely be
-        # good, causing more pruning and faster search
-        possible_moves = self.possible_moves()
-        possible_moves.sort(key=score_move)
-
-        if not possible_moves:
-            tt[tuple_board] = [0, -1]
-            return [0, -1]  # tie game
-
-        best_move = possible_moves[0]
-        maxEval = -1000 + self.turn
-        for move in possible_moves:
-            self.make_move(move)
-            score = -self.search(depth - 1, -beta, -alpha, tt)[0]
-            self.undo_move()
-            if score > maxEval:
-                maxEval = score
-                best_move = move
-            alpha = max(alpha, score)
-            if alpha > beta:
-                break
-        tt[tuple_board] = [maxEval, best_move]
-        return [maxEval, best_move]
-
     def threats(self):
         threats = [0, 0]
         # extra numbers set the outside of the board, so when it's flipped,
@@ -316,38 +229,6 @@ class ConnectFour:
 
         return clean_unreachable_threats(threats)
 
-
-    def threats2(self):
-        threats = [0, 0]
-        # extra numbers set the outside of the board, so when it's flipped,
-        # there aren't false positives for threats
-        b = self.board[0] | self.board[1] | 283691315109952 | 71776119061217280
-        for i in range(2):
-            my_b = self.board[i]
-
-            # vertical threats
-            threats[i] |= ~b & my_b << 1 & my_b << 2 & my_b << 3
-
-            # horizontal threats
-            threats[i] |= ~b & my_b << 7 & my_b << 14 & my_b << 21
-            threats[i] |= my_b >> 7 & ~b & my_b << 7 & my_b << 14
-            threats[i] |= my_b >> 14 & my_b >> 7 & ~b & my_b << 7
-            threats[i] |= my_b >> 21 & my_b >> 14 & my_b >> 7 & ~b
-
-            # positive diagonal threats
-            threats[i] |= ~b & my_b << 8 & my_b << 16 & my_b << 24
-            threats[i] |= my_b >> 8 & ~b & my_b << 8 & my_b << 16
-            threats[i] |= my_b >> 16 & my_b >> 8 & ~b & my_b << 8
-            threats[i] |= my_b >> 24 & my_b >> 16 & my_b >> 8 & ~b
-
-            # negative diagonal threats
-            threats[i] |= ~b & my_b << 6 & my_b << 12 & my_b << 18
-            threats[i] |= my_b >> 6 & ~b & my_b << 6 & my_b << 12
-            threats[i] |= my_b >> 12 & my_b >> 6 & ~b & my_b << 6
-            threats[i] |= my_b >> 18 & my_b >> 12 & my_b >> 6 & ~b
-
-        return clean_unreachable_threats2(threats)
-
     def live_threats(self, threats):
         # set top row so bottom row always thinks something is under it
         board = self.board[0] | self.board[1] | 283691315109952
@@ -372,29 +253,6 @@ class ConnectFour:
 
 def score_move(move):
     return abs(3 - move)
-
-def clean_unreachable_threats2(threats):
-    # when a player has 2 threats on top of each other, any other threats
-    # above those two are impossible to reach without the game ending,
-    # so we don't consider the above threats anymore
-    col_mask = pow(2, 6) - 1
-    for i in range(2):
-        for j in range(7):
-            col = threats[i] & (col_mask << (j * 7))
-            col &= col << 1
-            clear_mask = (pow(2, 5) - 1) << (j * 7)
-            # while runs until only the lowest double threat remains
-            while col != 0 and not round(math.log(col, 2), 6).is_integer():
-                col &= clear_mask
-                clear_mask >>= 1
-            col |= col - 1
-            col = ~col
-            col &= col_mask << (j * 7)
-            mask = (pow(2, 48) - 1) ^ col
-            threats[0] &= mask
-            threats[1] &= mask
-
-    return threats
 
 def clean_unreachable_threats(threats):
     # threats will never be reached if they are above a double threat
