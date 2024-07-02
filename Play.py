@@ -12,6 +12,7 @@ piece_radius = 40
 empty_color = (255, 255, 255)
 red = (255, 0, 0)
 yellow = (255, 255, 0)
+replay_rect = pygame.Rect(750, 650, 50, 50)
 
 
 def add_tuples(x, y):
@@ -72,7 +73,7 @@ def handleConnectFour(screen, game):
     screen.blit(text_surface, text_rect)
 
     # turn off mouse to prevent turns
-    pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
+    #pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
 
 
 # setup game
@@ -87,6 +88,7 @@ def setup_game():
 
     # draw empty game
     pygame.draw.rect(screen, board_color, board_rect)
+    pygame.draw.rect(screen, board_color, replay_rect)
 
     # draw holes
     piece_offset = (50, 50)
@@ -107,6 +109,7 @@ def playGame(turn, alternate):
     screen = setup_game()
     game = ConnectFour(ConnectFour.minimax_strategy, ConnectFour.minimax_strategy)
     running = True
+    playing = True
 
     # bot vs bot random start
     if not turn and not alternate:
@@ -125,7 +128,10 @@ def playGame(turn, alternate):
                     running = False
                     waitingForMove = False
                 elif event == pygame.MOUSEBUTTONDOWN:
-                    waitingForMove = playMoveInCol(screen, game, getColFromMouse())
+                    if pygame.mouse.get_pos()[0] >= 750 and pygame.mouse.get_pos()[1] >= 650:
+                        playGame(turn, alternate)
+                    elif playing:
+                        waitingForMove = playMoveInCol(screen, game, getColFromMouse())
 
 
         if not turn:  # bot turn
@@ -135,6 +141,7 @@ def playGame(turn, alternate):
 
         if game.connect_four():
             handleConnectFour(screen, game)
+            playing = False
 
         if alternate:
             turn = not turn
@@ -148,4 +155,4 @@ def playGame(turn, alternate):
 
 
 if __name__ == '__main__':
-    playGame(False, False)
+    playGame(True, True)
