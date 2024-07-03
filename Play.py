@@ -10,6 +10,7 @@ top_left = (50, 0)
 board_rect = pygame.Rect(top_left, (700, 600))
 piece_radius = 40
 empty_color = (255, 255, 255)
+last_move_color = (0, 0, 0)
 red = (255, 0, 0)
 yellow = (255, 255, 0)
 replay_rect = pygame.Rect(750, 650, 50, 50)
@@ -42,13 +43,21 @@ def playMoveInCol(screen, game, col):
     if col == -1 or col not in game.possible_moves():
         return True
 
-    # visually make move
     height0_pos = 550
     col0_pos = 100
+
+    # draw over last move
+    if game.moves:
+        last_turn = game.moves[-1]
+        last_height_pos = height0_pos - 100 * (game.heights[last_turn] - 1)
+        last_col_pos = col0_pos + 100 * last_turn
+        pygame.draw.circle(screen, getTurnColor(game.turn - 1), (last_col_pos, last_height_pos), piece_radius)
+
+    # visually make move
     height_pos = height0_pos - 100 * game.heights[col]
     col_pos = col0_pos + 100 * col
-    pygame.draw.circle(screen, getTurnColor(game.turn), (col_pos, height_pos),
-                       piece_radius)
+    pygame.draw.circle(screen, getTurnColor(game.turn), (col_pos, height_pos), piece_radius)
+    pygame.draw.circle(screen, getTurnColor(game.turn - 1), (col_pos, height_pos), piece_radius/8)
 
     # make move
     game.make_move(col)
