@@ -127,14 +127,14 @@ class ConnectFour:
 
     def positional_score(self, board):
         # values are the number of possible connect fours at that spot / 10
-        bonus_table = [
-            [.3, .4, .5, .7, .5, .4, .3],
-            [.4, .6, .8, 1, .8, .6, .4],
-            [.5, .8, 1.1, 1.3, 1.1, .8, .5],
-            [.5, .8, 1.1, 1.3, 1.1, .8, .5],
-            [.4, .6, .8, 1, .8, .6, .4],
-            [.3, .4, .5, .7, .5, .4, .3]
-        ]
+        bonus_table = {
+            0: {0: .3, 1: .4, 2: .5, 3: .7, 4: .5, 5: .4, 6: .3},
+            1: {0: .4, 1: .6, 2: .8, 3: 1, 4: .8, 5: .6, 6: .4},
+            2: {0: .5, 1: .8, 2: 1.1, 3: 1.3, 4: 1.1, 5: .8, 6: .5},
+            3: {0: .5, 1: .8, 2: 1.1, 3: 1.3, 4: 1.1, 5: .8, 6: .5},
+            4: {0: .4, 1: .6, 2: .8, 3: 1, 4: .8, 5: .6, 6: .4},
+            5: {0: .3, 1: .4, 2: .5, 3: .7, 4: .5, 5: .4, 6: .3}
+        }
         mask = 1
         score = 0
         for i in range(7):
@@ -233,8 +233,8 @@ class ConnectFour:
         # set top row so bottom row always thinks something is under it
         board = self.board[0] | self.board[1] | 283691315109952
         live_threats = [0, 0]
-        for i in range(2):
-            live_threats[i] = board << 1 & threats[i]
+        live_threats[0] = board << 1 & threats[0]
+        live_threats[1] = board << 1 & threats[1]
         return live_threats
 
     def mirror_board(self):
