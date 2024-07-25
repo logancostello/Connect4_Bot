@@ -148,14 +148,13 @@ class ConnectFour:
             4: {0: .4, 1: .6, 2: .8, 3: 1, 4: .8, 5: .6, 6: .4},
             5: {0: .3, 1: .4, 2: .5, 3: .7, 4: .5, 5: .4, 6: .3}
         }
-        score = 0
-        for i in range(7):
-            mask = 1 << 7 * i
-            for j in range(self.heights[i]):
-                if mask & board:
-                    score += bonus_table[j][i]
-                mask <<= 1
-        return round(score, 6)
+
+        return round(sum(
+            bonus_table[j][i]
+            for i in range(7)
+            for j in range(self.heights[i])
+            if (board & (1 << (7 * i + j)))
+        ), 6)
 
     def search(self, depth, alpha=-math.inf, beta=math.inf, tt=None):
         # negamax search algorithm with alpha-beta pruning

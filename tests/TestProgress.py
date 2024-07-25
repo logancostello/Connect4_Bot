@@ -161,6 +161,10 @@ if __name__ == '__main__':
 # [0.05, 0.38, 0.23, 0.1, 0.21, 0.64]
 # 2.83x faster than pre-refactor
 
+# using python's sum func for positional scoring
+# [0.03, 0.23, 0.15, 0.06, 0.13, 0.39]
+# 4.61x faster than pre-refactor
+
 # SKILL PROGRESS:
 # shared threat vs pre-refactor [233, 46, 221] (depth 7)
 
