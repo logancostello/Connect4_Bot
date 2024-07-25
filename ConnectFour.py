@@ -62,10 +62,23 @@ class ConnectFour:
 
     def possible_moves(self):
         # return array of ints representing which columns can be played in
+        # explicitly write moves in the fastest search order to avoid sorting
         moves = []
-        for i in range(7):
-            if self.heights[i] < 6:
-                moves.append(i)
+
+        if self.heights[3] < 6:
+            moves.append(3)
+        if self.heights[2] < 6:
+            moves.append(2)
+        if self.heights[4] < 6:
+            moves.append(4)
+        if self.heights[1] < 6:
+            moves.append(1)
+        if self.heights[5] < 6:
+            moves.append(5)
+        if self.heights[0] < 6:
+            moves.append(0)
+        if self.heights[6] < 6:
+            moves.append(6)
         return moves
 
     def make_move(self, col: int):
@@ -173,10 +186,7 @@ class ConnectFour:
             tt[tuple_board] = [evaluation, -1]
             return [evaluation, -1]  # heuristic evaluation
 
-        # look at moves closer to the center first, as they will likely be
-        # good, causing more pruning and faster search
         possible_moves = self.possible_moves()
-        possible_moves.sort(key=score_move)
 
         if not possible_moves:
             tt[tuple_board] = [0, -1]
@@ -248,10 +258,6 @@ class ConnectFour:
             mirrored[i] |= (self.board[i] & (mask << 35)) >> 28
             mirrored[i] |= (self.board[i] & (mask << 42)) >> 42
         return mirrored
-
-
-def score_move(move):
-    return abs(3 - move)
 
 def clean_unreachable_threats(threats):
     # threats will never be reached if they are above a double threat

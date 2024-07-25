@@ -144,7 +144,7 @@ def playGame(turn, alternate):
 
 
         if not turn:  # bot turn
-            bot_move = game.search(7)[1]
+            bot_move = game.search(8)[1]
             playMoveInCol(screen, game, bot_move)
             #time.sleep(1)
 
@@ -164,4 +164,4 @@ def playGame(turn, alternate):
 
 
 if __name__ == '__main__':
-    playGame(True, True)
+    playGame(False, False)

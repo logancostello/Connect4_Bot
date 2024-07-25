@@ -141,7 +141,7 @@ class TestBoard(unittest.TestCase):
             ConnectFour.random_strategy
         )
 
-        moves = [0, 1, 2, 3, 4, 5, 6]
+        moves = [3, 2, 4, 1, 5, 0, 6]
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_1(self):
@@ -151,7 +151,7 @@ class TestBoard(unittest.TestCase):
         )
 
         game.make_moves([0, 0, 0, 0, 0, 0])
-        moves = [1, 2, 3, 4, 5, 6]
+        moves = [3, 2, 4, 1, 5, 6]
         self.assertEqual(moves, game.possible_moves())
 
     def test_possible_moves_2(self):
@@ -161,7 +161,7 @@ class TestBoard(unittest.TestCase):
         )
         for i in range(6):
             game.make_moves([4, 5, 6])
-        moves = [0, 1, 2, 3]
+        moves = [3, 2, 1, 0]
 
         self.assertEqual(moves, game.possible_moves())
 
