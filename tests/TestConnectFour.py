@@ -270,6 +270,7 @@ class TestBoard(unittest.TestCase):
         for i in range(42):
             game.undo_move()
 
+
         self.assertEqual(0, game.board[0])
         self.assertEqual(0, game.board[1])
         self.assertEqual({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}, game.heights)
